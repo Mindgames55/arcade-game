@@ -6,19 +6,19 @@ var Enemy = function() {
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
-    this.speed=Math.floor(Math.random()*200+30);
+    this.speed=randomInt(70,300);
     this.x=-150;
     let positionX= -150;
-    let columnPlacement= Math.floor(Math.random()*2+1);
+    let columnPlacement= randomInt(1,3);
     switch (columnPlacement) {
       case 1:
         this.y=70;
         break;
       case 2:
-        this.y=140;
+        this.y=150;
         break;
       default:
-        this.y=70*3;
+        this.y=70*3+20;
     }
 };
 
@@ -37,6 +37,39 @@ Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
+
+class Players{
+  constructor(){
+    this.sprite='images/char-boy.png';
+    this.x=181*2;
+    this.y=5*70;
+  }
+
+  update(){
+    this.x=this.x;
+    this.y=this.y;
+  }
+
+  render(){
+    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+  }
+
+  handleInput(keyPressed){
+    switch (keyPressed) {
+      case 'up':
+        this.y-=70;
+        break;
+      case 'down':
+        this.y+=70;
+        break;
+      case 'left':
+        this.x-=130;
+        break;
+      case 'right':
+        this.x+=130;
+    }
+  }
+}
 // Now write your own player class
 // This class requires an update(), render() and
 // a handleInput() method.
@@ -53,7 +86,7 @@ const intervalID= window.setInterval(function(){
 },3000);
 
 // Place the player object in a variable called player
-
+const player= new Players();
 
 
 // This listens for key presses and sends the keys to your
@@ -66,7 +99,7 @@ document.addEventListener('keyup', function(e) {
         40: 'down'
     };
 
-    // player.handleInput(allowedKeys[e.keyCode]);
+     player.handleInput(allowedKeys[e.keyCode]);
 });
 
 //returns a random integer between min-max inclusive

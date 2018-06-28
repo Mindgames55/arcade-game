@@ -41,7 +41,7 @@ Enemy.prototype.render = function() {
 class Players{
   constructor(){
     this.sprite='images/char-boy.png';
-    this.x=181*2;
+    this.x=101*2;
     this.y=5*70;
   }
 
@@ -63,10 +63,10 @@ class Players{
         this.y+=70;
         break;
       case 'left':
-        this.x-=130;
+        this.x-=10;
         break;
       case 'right':
-        this.x+=130;
+        this.x+=10;
     }
   }
 }

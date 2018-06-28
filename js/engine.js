@@ -79,7 +79,16 @@ var Engine = (function(global) {
      */
     function update(dt) {
         updateEntities(dt);
-        // checkCollisions();
+        checkCollisions();
+    }
+
+    function checkCollisions(){
+      allEnemies.forEach(function(enemy){
+        if ((Math.abs(enemy.x-player.x)<70) && (Math.abs(enemy.y-player.y)<50)){
+          player.x=181*2;
+          player.y=5*70;
+        }
+      })
     }
 
     /* This is called by the update function and loops through all of the

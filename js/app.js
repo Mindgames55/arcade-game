@@ -1,14 +1,25 @@
 // Enemies our player must avoid
-var Enemy = function(speed) {
+var Enemy = function() {
     // Variables applied to each of our instances go here,
     // we've provided one for you to get started
 
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
-    this.speed=speed;
-    this.x=10;
-    this.y=70;
+    this.speed=Math.floor(Math.random()*200+30);
+    this.x=-150;
+    let positionX= -150;
+    let columnPlacement= Math.floor(Math.random()*2+1);
+    switch (columnPlacement) {
+      case 1:
+        this.y=70;
+        break;
+      case 2:
+        this.y=140;
+        break;
+      default:
+        this.y=70*3;
+    }
 };
 
 // Update the enemy's position, required method for game
@@ -37,9 +48,9 @@ Enemy.prototype.render = function() {
 let allEnemies=[];
 
 const intervalID= window.setInterval(function(){
-  let enemyInstances= new Enemy(Math.floor(Math.random()*20+10));
+  let enemyInstances= new Enemy();
   allEnemies.push(enemyInstances);
-},5000);
+},3000);
 
 // Place the player object in a variable called player
 

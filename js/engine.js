@@ -22,14 +22,11 @@ var Engine = (function(global) {
         win = global.window,
         canvas = doc.createElement('canvas'),
         ctx = canvas.getContext('2d'),
-        points=doc.createElement('div'),
         lastTime;
 
     canvas.width = 505;
     canvas.height = 606;
     doc.body.appendChild(canvas);
-    doc.body.insertBefore(points, canvas);
-    points.innerHTML="<p>jdnjn</p>";
 
     /* This function serves as the kickoff point for the game loop itself
      * and handles properly calling the update and render methods.
@@ -102,8 +99,12 @@ var Engine = (function(global) {
      * render methods.
      */
     function updateEntities(dt) {
-        allEnemies.forEach(function(enemy) {
+        allEnemies.forEach(function(enemy, index) {
             enemy.update(dt);
+            //eliminates the only reference to the crossing objectst to make them garbage collectible once the have crossed the screen
+            if (enemy.x>600){
+              let erased=allEnemies.splice(index, 1);
+            }
         });
         player.update();
     }
@@ -119,6 +120,7 @@ var Engine = (function(global) {
          * for that particular row of the game level.
          */
         var rowImages = [
+                'images/Heart.png',
                 'images/water-block.png',   // Top row is water
                 'images/stone-block.png',   // Row 1 of 3 of stone
                 'images/stone-block.png',   // Row 2 of 3 of stone
@@ -137,7 +139,7 @@ var Engine = (function(global) {
          * and, using the rowImages array, draw the correct image for that
          * portion of the "grid"
          */
-        for (row = 0; row < numRows; row++) {
+        for (row = 1; row < numRows; row++) {
             for (col = 0; col < numCols; col++) {
                 /* The drawImage function of the canvas' context element
                  * requires 3 parameters: the image to draw, the x coordinate
@@ -146,7 +148,9 @@ var Engine = (function(global) {
                  * so that we get the benefits of caching these images, since
                  * we're using them over and over.
                  */
-
+                if (col<3){
+                  ctx.drawImage(Resources.get(rowImages[0]), col * 50, -20);
+                }
                 ctx.drawImage(Resources.get(rowImages[row]), col * 101, row * 83);
             }
         }
@@ -182,6 +186,7 @@ var Engine = (function(global) {
      * all of these images are properly loaded our game will start.
      */
     Resources.load([
+        'images/Heart.png',
         'images/stone-block.png',
         'images/water-block.png',
         'images/grass-block.png',

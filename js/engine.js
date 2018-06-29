@@ -85,8 +85,7 @@ var Engine = (function(global) {
     function checkCollisions(){
       allEnemies.forEach(function(enemy){
         if ((Math.abs(enemy.x-player.x)<65) && (Math.abs(enemy.y-player.y)<83/2)){
-          player.x=101*2;
-          player.y=4*83+83/2;
+          player.startingPosition();
         }
       })
     }

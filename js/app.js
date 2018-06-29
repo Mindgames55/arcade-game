@@ -1,6 +1,3 @@
-//div with lives and punctuation
-
-
 // Enemies our player must avoid
 var Enemy = function() {
     // Variables applied to each of our instances go here,
@@ -60,16 +57,16 @@ class Players{
   handleInput(keyPressed){
     switch (keyPressed) {
       case 'up':
-        this.y-=83;
+        this.y-=(this.y>40)?83:0;
         break;
       case 'down':
-        this.y+=83;
+        this.y+=(this.y<(4*83+83/2))?83:0;
         break;
       case 'left':
-        this.x-=50.5;
+        this.x-=(this.x>=50.5)?50.5:0;
         break;
       case 'right':
-        this.x+=50.5;
+        this.x+=(this.x<400)?50.5:0;
     }
   }
 }

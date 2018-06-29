@@ -42,7 +42,7 @@ class Players{
   constructor(){
     this.sprite='images/char-boy.png';
     this.x=101*2;
-    this.y=5*70;
+    this.y=4*83+83/2;
   }
 
   update(){
@@ -57,16 +57,16 @@ class Players{
   handleInput(keyPressed){
     switch (keyPressed) {
       case 'up':
-        this.y-=70;
+        this.y-=83;
         break;
       case 'down':
-        this.y+=70;
+        this.y+=83;
         break;
       case 'left':
-        this.x-=10;
+        this.x-=50.5;
         break;
       case 'right':
-        this.x+=10;
+        this.x+=50.5;
     }
   }
 }

@@ -82,7 +82,7 @@ let allEnemies=[];
 const intervalID= window.setInterval(function(){
   let enemyInstances= new Enemy();
   allEnemies.push(enemyInstances);
-},3000);
+},1000);
 
 // Place the player object in a variable called player
 const player= new Players();

@@ -1,8 +1,9 @@
 // Enemies our player must avoid
 class MovingObjects{
-  constructor(fileName, name){
-    this.sprite='images/'+fileName+'.png';
+  constructor(name){
+    this.sprite='images/'+name+'.png';
     this.name=name;
+    console.log(this.sprite);
     this.speed=randomInt(70,300);
     this.x=-150;
     let columnPlacement= randomInt(1,3);
@@ -85,11 +86,21 @@ class Players{
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 
-let allEnemies=[];
+let allMovingObjects=[];
+const gemValues=[
+  'Gem-Blue',
+  'Gem-Green',
+  'Gem-Orange'
+];
 
-const intervalID= window.setInterval(function(){
-  let enemyInstances= new MovingObjects('enemy-bug');
-  allEnemies.push(enemyInstances);
+const gemIntervalID= window.setInterval(function(){
+  let movingGemInstances= new MovingObjects(gemValues[randomInt(0,2)]);  //generates gems randomly
+  allMovingObjects.push(movingGemInstances);
+},3000);
+
+const bugIntervalID=window.setInterval(function(){
+  let movingBugsInstances= new MovingObjects('enemy-bug');
+  allMovingObjects.push(movingBugsInstances);
 },1000);
 
 // Place the player object in a variable called player

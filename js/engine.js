@@ -83,7 +83,7 @@ var Engine = (function(global) {
     }
 
     function checkCollisions(){
-      allEnemies.forEach(function(enemy){
+      allMovingObjects.forEach(function(enemy){
         if ((Math.abs(enemy.x-player.x)<65) && (Math.abs(enemy.y-player.y)<83/2)){
           player.startingPosition();
         }
@@ -91,18 +91,18 @@ var Engine = (function(global) {
     }
 
     /* This is called by the update function and loops through all of the
-     * objects within your allEnemies array as defined in app.js and calls
+     * objects within your allMovingObjects array as defined in app.js and calls
      * their update() methods. It will then call the update function for your
      * player object. These update methods should focus purely on updating
      * the data/properties related to the object. Do your drawing in your
      * render methods.
      */
     function updateEntities(dt) {
-        allEnemies.forEach(function(enemy, index) {
+        allMovingObjects.forEach(function(enemy, index) {
             enemy.update(dt);
             //eliminates the only reference to the crossing objectst to make them garbage collectible once the have crossed the screen
             if (enemy.x>canvas.width){
-              let erased=allEnemies.splice(index, 1);
+              let erased=allMovingObjects.splice(index, 1);
             }
         });
         player.update();
@@ -161,7 +161,7 @@ var Engine = (function(global) {
         /* Loop through all of the objects within the allEnemies array and call
          * the render function you have defined.
          */
-        allEnemies.forEach(function(enemy) {
+        allMovingObjects.forEach(function(enemy) {
             enemy.render();
         });
 
@@ -181,6 +181,9 @@ var Engine = (function(global) {
      * all of these images are properly loaded our game will start.
      */
     Resources.load([
+        'images/Gem-Blue.png',
+        'images/Gem-Green.png',
+        'images/Gem-Orange.png',
         'images/stone-block.png',
         'images/water-block.png',
         'images/grass-block.png',

@@ -1,4 +1,4 @@
-// Enemies our player must avoid
+// This is the parent class, enemies and gems will inherit from here
 class MovingObjects{
   constructor(name){
     this.sprite='images/'+name+'.png';
@@ -23,9 +23,6 @@ class MovingObjects{
 
   update(dt){
     this.x+=dt*this.speed;
-      // You should multiply any movement by the dt parameter
-      // which will ensure the game runs at the same speed for
-      // all computers.
   }
 
   render() {
@@ -42,18 +39,6 @@ class Gems extends MovingObjects{
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y,60,80);
   }
 }
-    // Variables applied to each of our instances go here,
-    // we've provided one for you to get started
-
-    // The image/sprite for our enemies, this uses
-    // a helper we've provided to easily load images
-
-
-// Update the enemy's position, required method for game
-// Parameter: dt, a time delta between ticks
-
-// Draw the enemy on the screen, required method for game
-
 
 class Players{
   constructor(fileName){

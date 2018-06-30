@@ -3,19 +3,21 @@ class MovingObjects{
   constructor(name){
     this.sprite='images/'+name+'.png';
     this.name=name;
-    console.log(this.sprite);
     this.speed=randomInt(70,300);
     this.x=-150;
+  }
+
+  placeInColumns(first=70,second=150,third=230){
     let columnPlacement= randomInt(1,3);
     switch (columnPlacement) {
       case 1:
-        this.y=70;
+        this.y=first;
         break;
       case 2:
-        this.y=150;
+        this.y=second;
         break;
       default:
-        this.y=70*3+20;
+        this.y=third;
     }
   }
 
@@ -28,6 +30,16 @@ class MovingObjects{
 
   render() {
       ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+  }
+}
+
+class Enemies extends MovingObjects{
+
+}
+
+class Gems extends MovingObjects{
+  render(){
+    ctx.drawImage(Resources.get(this.sprite), this.x, this.y,60,80);
   }
 }
     // Variables applied to each of our instances go here,
@@ -94,12 +106,14 @@ const gemValues=[
 ];
 
 const gemIntervalID= window.setInterval(function(){
-  let movingGemInstances= new MovingObjects(gemValues[randomInt(0,2)]);  //generates gems randomly
+  let movingGemInstances= new Gems(gemValues[randomInt(0,2)]);  //generates gems randomly
+  movingGemInstances.placeInColumns(125, 205, 285);
   allMovingObjects.push(movingGemInstances);
 },3000);
 
 const bugIntervalID=window.setInterval(function(){
-  let movingBugsInstances= new MovingObjects('enemy-bug');
+  let movingBugsInstances= new Enemies('enemy-bug');
+  movingBugsInstances.placeInColumns();
   allMovingObjects.push(movingBugsInstances);
 },1000);
 

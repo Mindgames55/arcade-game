@@ -75,22 +75,15 @@ class Players{
     }
   }
 }
-// Now write your own player class
-// This class requires an update(), render() and
-// a handleInput() method.
-
-
-// Now instantiate your objects.
-// Place all enemy objects in an array called allEnemies
 
 let allMovingObjects=[];
-const gemValues=[
-  'Gem-Blue',
-  'Gem-Green',
-  'Gem-Orange'
-];
 
 const gemIntervalID= window.setInterval(function(){
+  const gemValues=[
+    'Gem-Blue',
+    'Gem-Green',
+    'Gem-Orange'
+  ];
   let movingGemInstances= new Gems(gemValues[randomInt(0,2)]);  //generates gems randomly
   movingGemInstances.placeInColumns(125, 205, 285);
   allMovingObjects.push(movingGemInstances);
@@ -102,13 +95,9 @@ const bugIntervalID=window.setInterval(function(){
   allMovingObjects.push(movingBugsInstances);
 },1000);
 
-// Place the player object in a variable called player
 const player= new Players('char-boy');
 player.startingPosition();
 
-
-// This listens for key presses and sends the keys to your
-// Player.handleInput() method. You don't need to modify this.
 document.addEventListener('keyup', function(e) {
     var allowedKeys = {
         37: 'left',
@@ -120,7 +109,7 @@ document.addEventListener('keyup', function(e) {
      player.handleInput(allowedKeys[e.keyCode]);
 });
 
-//returns a random integer between min-max inclusive
+//returns a random integer between min-max both inclusive
 function randomInt(min, max){
   return Math.floor(Math.random()*(max-min+1)+min);
 }

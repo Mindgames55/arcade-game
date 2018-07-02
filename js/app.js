@@ -64,11 +64,6 @@ class Players{
     this.y=this.startingY+4*83;
   }
 
-  update(){
-    this.x=this.x;
-    this.y=this.y;
-  }
-
   render(){
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
   }

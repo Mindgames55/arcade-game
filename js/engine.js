@@ -105,7 +105,6 @@ var Engine = (function(global) {
               let erased=allMovingObjects.splice(index, 1);
             }
         });
-        player.update();
     }
 
     /* This function initially draws the "game level", it will then call

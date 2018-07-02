@@ -83,24 +83,9 @@ var Engine = (function(global) {
     }
 
     function checkCollisions(){
-      allMovingObjects.forEach(function(object,index){
-        if ((Math.abs(object.x-player.x)<65) && (Math.abs(object.y-player.y)<83/2)){
-          if (object.name==='enemy-bug'){
-            player.startingPosition();
-          }
-          else {
-            allMovingObjects.splice(index, 1);
-            if (object.name==='Gem-Blue'){
-
-              console.log('blue');
-            }
-            else if (object.name==='Gem-Green'){
-              console.log('green');
-            }
-            else {
-              console.log('orange');
-            }
-          }
+      allMovingObjects.forEach(function(enemy, index){
+        if (enemy.checkCollisions()){
+          allMovingObjects.splice(index, 1);  //hchange
         }
       })
     }

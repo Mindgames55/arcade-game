@@ -7,18 +7,10 @@ class MovingObjects{
     this.x=-150;
   }
 
-  placeInColumns(first=70,second=150,third=230){
+  placeInColumns(yDisplacement){ //this is to generate placement in columns randomly
+    this.startingY=yDisplacement;  //this value is to center the image on every column (player uses it as well)
     let columnPlacement= randomInt(1,3);
-    switch (columnPlacement) {
-      case 1:
-        this.y=first;
-        break;
-      case 2:
-        this.y=second;
-        break;
-      default:
-        this.y=third;
-    }
+    this.y=yDisplacement+83*columnPlacement;
   }
 
   update(dt){
@@ -28,6 +20,27 @@ class MovingObjects{
   render() {
       ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
   }
+
+  checkCollisions(){
+      let x=(this.name==='enemy-bug')?65:25;  //collision threshold for x
+      if ((Math.abs(this.x-player.x)<x) && (Math.abs(this.y-player.y)===Math.abs(this.startingY-player.startingY))){
+        switch (this.name){
+          case 'enemy-bug':
+            player.startingPosition();
+            return false;
+          case 'Gem-Blue':
+            console.log('blue');
+            break;
+          case 'Gem-Green':
+            console.log('green');
+            break;
+          case 'Gem-Orange':
+          console.log('orange');
+        }
+        return true;
+      }
+  }
+
 }
 
 class Enemies extends MovingObjects{
@@ -43,11 +56,12 @@ class Gems extends MovingObjects{
 class Players{
   constructor(fileName){
     this.sprite='images/'+fileName+'.png';
+    this.startingY=-30;
   }
 
   startingPosition(){
     this.x=101*2;
-    this.y=4*83+83/2;
+    this.y=this.startingY+4*83;
   }
 
   update(){
@@ -85,13 +99,13 @@ const gemIntervalID= window.setInterval(function(){
     'Gem-Orange'
   ];
   let movingGemInstances= new Gems(gemValues[randomInt(0,2)]);  //generates gems randomly
-  movingGemInstances.placeInColumns(125, 205, 285);
+  movingGemInstances.placeInColumns(41.5);
   allMovingObjects.push(movingGemInstances);
 },3000);
 
 const bugIntervalID=window.setInterval(function(){
   let movingBugsInstances= new Enemies('enemy-bug');
-  movingBugsInstances.placeInColumns();
+  movingBugsInstances.placeInColumns(-20);
   allMovingObjects.push(movingBugsInstances);
 },1000);
 

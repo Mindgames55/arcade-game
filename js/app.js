@@ -26,7 +26,7 @@ class MovingObjects{
       if ((Math.abs(this.x-player.x)<x) && (Math.abs(this.y-player.y)===Math.abs(this.startingY-player.startingY))){
         switch (this.name){
           case 'enemy-bug':
-            player.startingPosition();
+            player.startingPositionOnGame();
             return false;
           case 'Gem-Blue':
             console.log('blue');
@@ -57,13 +57,12 @@ class Selector{
   constructor(fileName){
     this.sprite='images/'+fileName+'.png';
     this.x=0;
-    this.y=390;
+    this.y=310;
     this.sizeX=100;
     this.sizeY=90;
   }
 
   render(){
-    console.log(this);
     renderAll.call(this);
   }
 
@@ -74,12 +73,11 @@ class Selector{
         this.x-=(this.x!==0)?101:0;
         break;
       case 'right':
-        this.x+=(this.x!==505)?101:0;
+        this.x+=(this.x!==404)?101:0;
         break;
       case 'enter':
-       init2();
+      return this.x;
     }
-    this.render();
   }
 
 }
@@ -88,15 +86,18 @@ class Players{
   constructor(fileName){
     this.sprite='images/'+fileName+'.png';
     this.startingY=-30;
+    this.x=101;
+    this.y=300;
   }
 
-  startingPosition(){
+  startingPositionOnGame(){
     this.x=101*2;
     this.y=this.startingY+4*83;
   }
 
-  render(){
-    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+  render(column){
+    this.x*=column;
+    renderAll.call(this);
   }
 
   handleInput(keyPressed){
@@ -127,7 +128,6 @@ class Players{
     ];
     let movingGemInstances= new Gems(gemValues[randomInt(0,2)]);  //generates gems randomly
     movingGemInstances.placeInColumns(41.5);
-    console.log(movingGemInstances);
     allMovingObjects.push(movingGemInstances);
   },3000);
 
@@ -137,9 +137,7 @@ class Players{
     allMovingObjects.push(movingBugsInstances);
   },1000);
 
-  const player= new Players('char-boy');
-  player.startingPosition();
-
+  const selector= new Selector('Selector');
 
   document.addEventListener('keyup', function(e) {
       var allowedKeys = {
@@ -151,7 +149,8 @@ class Players{
       };
 
 
-       player.handleInput(allowedKeys[e.keyCode]);
+       let selectedX=selector.handleInput(allowedKeys[e.keyCode]);
+       console.log(selectedX);
   });
 
 

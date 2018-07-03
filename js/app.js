@@ -22,7 +22,7 @@ class MovingObjects{
   }
 
   checkCollisions(){
-      let x=(this.name==='enemy-bug')?65:25;  //collision threshold for x
+      let x=(this.name==='enemy-bug')?65:45;  //collision threshold for x
       if ((Math.abs(this.x-player.x)<x) && (Math.abs(this.y-player.y)===Math.abs(this.startingY-player.startingY))){
         switch (this.name){
           case 'enemy-bug':
@@ -49,7 +49,7 @@ class Enemies extends MovingObjects{
 
 class Gems extends MovingObjects{
   render(){
-    ctx.drawImage(Resources.get(this.sprite), this.x, this.y,60,80);
+    ctx.drawImage(Resources.get(this.sprite), this.x, this.y,80,80);
   }
 }
 

@@ -62,9 +62,46 @@ var Engine = (function(global) {
      * particularly setting the lastTime variable that is required for the
      * game loop.
      */
-    function init() {
+     function init(){
+       let avatar=[
+         'images/char-boy.png',
+         'images/char-cat-girl.png',
+         'images/char-horn-girl.png',
+         'images/char-pink-girl.png',
+         'images/char-princess-girl.png'
+       ]
+       for (let i=0;i<5;i++){
+         ctx.drawImage(Resources.get(avatar[i]), i * 101, 300);
+       }
+       let x=0;
+       ctx.drawImage(Resources.get('images/Selector.png'), x, 390,100,90);
+
+       document.addEventListener('keyup', function(e){
+         const allowedKeys={
+           37: 'left',
+           39: 'right',
+           13: 'enter'
+         }
+         switch (allowedKeys[e.keyCode]) {
+           case 'left':
+           console.log('left');
+             x-=(x!==0)?101:0;
+             ctx.drawImage(Resources.get('images/Selector.png'), x, 390,100,90);
+             break;
+           case 'right':
+             x+=(x!==505)?101:0;
+             ctx.drawImage(Resources.get('images/Selector.png'), x, 390,100,90);
+             break;
+           case 'enter':
+            init2();
+         }
+       })
+     }
+
+    function init2() {
         reset();
         lastTime = Date.now();
+        gameStart();
         main();
     }
 
@@ -180,6 +217,12 @@ var Engine = (function(global) {
      * all of these images are properly loaded our game will start.
      */
     Resources.load([
+        'images/Selector.png',
+        'images/char-boy.png',
+        'images/char-cat-girl.png',
+        'images/char-horn-girl.png',
+        'images/char-pink-girl.png',
+        'images/char-princess-girl.png',
         'images/Gem-Blue.png',
         'images/Gem-Green.png',
         'images/Gem-Orange.png',

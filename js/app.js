@@ -85,38 +85,43 @@ class Players{
   }
 }
 
-let allMovingObjects=[];
 
-const gemIntervalID= window.setInterval(function(){
-  const gemValues=[
-    'Gem-Blue',
-    'Gem-Green',
-    'Gem-Orange'
-  ];
-  let movingGemInstances= new Gems(gemValues[randomInt(0,2)]);  //generates gems randomly
-  movingGemInstances.placeInColumns(41.5);
-  allMovingObjects.push(movingGemInstances);
-},3000);
+function gameStart(){
+  let allMovingObjects=[];
 
-const bugIntervalID=window.setInterval(function(){
-  let movingBugsInstances= new Enemies('enemy-bug');
-  movingBugsInstances.placeInColumns(-20);
-  allMovingObjects.push(movingBugsInstances);
-},1000);
+  const gemIntervalID= window.setInterval(function(){
+    const gemValues=[
+      'Gem-Blue',
+      'Gem-Green',
+      'Gem-Orange'
+    ];
+    let movingGemInstances= new Gems(gemValues[randomInt(0,2)]);  //generates gems randomly
+    movingGemInstances.placeInColumns(41.5);
+    console.log(movingGemInstances);
+    allMovingObjects.push(movingGemInstances);
+  },3000);
 
-const player= new Players('char-boy');
-player.startingPosition();
+  const bugIntervalID=window.setInterval(function(){
+    let movingBugsInstances= new Enemies('enemy-bug');
+    movingBugsInstances.placeInColumns(-20);
+    allMovingObjects.push(movingBugsInstances);
+  },1000);
 
-document.addEventListener('keyup', function(e) {
-    var allowedKeys = {
-        37: 'left',
-        38: 'up',
-        39: 'right',
-        40: 'down'
-    };
+  const player= new Players('char-boy');
+  player.startingPosition();
 
-     player.handleInput(allowedKeys[e.keyCode]);
-});
+  document.addEventListener('keyup', function(e) {
+      var allowedKeys = {
+          37: 'left',
+          38: 'up',
+          39: 'right',
+          40: 'down'
+      };
+
+       player.handleInput(allowedKeys[e.keyCode]);
+  });
+}
+
 
 //returns a random integer between min-max both inclusive
 function randomInt(min, max){

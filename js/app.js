@@ -53,6 +53,37 @@ class Gems extends MovingObjects{
   }
 }
 
+class Selector{
+  constructor(fileName){
+    this.sprite='images/'+fileName+'.png';
+    this.x=0;
+    this.y=390;
+    this.sizeX=100;
+    this.sizeY=90;
+  }
+
+  render(){
+    console.log(this);
+    renderAll.call(this);
+  }
+
+  handleInput(keyPressed){
+    switch (keyPressed) {
+      case 'left':
+      console.log('left');
+        this.x-=(this.x!==0)?101:0;
+        break;
+      case 'right':
+        this.x+=(this.x!==505)?101:0;
+        break;
+      case 'enter':
+       init2();
+    }
+    this.render();
+  }
+
+}
+
 class Players{
   constructor(fileName){
     this.sprite='images/'+fileName+'.png';
@@ -86,7 +117,6 @@ class Players{
 }
 
 
-function gameStart(){
   let allMovingObjects=[];
 
   const gemIntervalID= window.setInterval(function(){
@@ -110,17 +140,19 @@ function gameStart(){
   const player= new Players('char-boy');
   player.startingPosition();
 
+
   document.addEventListener('keyup', function(e) {
       var allowedKeys = {
           37: 'left',
           38: 'up',
           39: 'right',
-          40: 'down'
+          40: 'down',
+          13: 'enter'
       };
+
 
        player.handleInput(allowedKeys[e.keyCode]);
   });
-}
 
 
 //returns a random integer between min-max both inclusive

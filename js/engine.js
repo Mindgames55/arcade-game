@@ -13,6 +13,8 @@
  * writing app.js a little simpler to work with.
  */
 
+
+
 var Engine = (function(global) {
     /* Predefine the variables we'll be using within this scope,
      * create the canvas element, grab the 2D context for that canvas
@@ -63,6 +65,7 @@ var Engine = (function(global) {
      * game loop.
      */
      function init(){
+       let init=true;
        let avatar=[
          'images/char-boy.png',
          'images/char-cat-girl.png',
@@ -73,35 +76,12 @@ var Engine = (function(global) {
        for (let i=0;i<5;i++){
          ctx.drawImage(Resources.get(avatar[i]), i * 101, 300);
        }
-       let x=0;
-       ctx.drawImage(Resources.get('images/Selector.png'), x, 390,100,90);
-
-       document.addEventListener('keyup', function(e){
-         const allowedKeys={
-           37: 'left',
-           39: 'right',
-           13: 'enter'
-         }
-         switch (allowedKeys[e.keyCode]) {
-           case 'left':
-           console.log('left');
-             x-=(x!==0)?101:0;
-             ctx.drawImage(Resources.get('images/Selector.png'), x, 390,100,90);
-             break;
-           case 'right':
-             x+=(x!==505)?101:0;
-             ctx.drawImage(Resources.get('images/Selector.png'), x, 390,100,90);
-             break;
-           case 'enter':
-            init2();
-         }
-       })
+       render();
      }
 
     function init2() {
         reset();
         lastTime = Date.now();
-        gameStart();
         main();
     }
 
@@ -154,39 +134,48 @@ var Engine = (function(global) {
         /* This array holds the relative URL to the image used
          * for that particular row of the game level.
          */
-        var rowImages = [
-                'images/water-block.png',   // Top row is water
-                'images/stone-block.png',   // Row 1 of 3 of stone
-                'images/stone-block.png',   // Row 2 of 3 of stone
-                'images/stone-block.png',   // Row 3 of 3 of stone
-                'images/grass-block.png',   // Row 1 of 2 of grass
-                'images/grass-block.png'    // Row 2 of 2 of grass
-            ],
-            numRows = 6,
-            numCols = 5,
-            row, col;
 
-        // Before drawing, clear existing canvas
-        ctx.clearRect(0,0,canvas.width,canvas.height)
+        if (init){
+          const selector= new Selector('Selector');
+          selector.render();
+          init=false;
+        }
+        else {
+          var rowImages = [
+                  'images/water-block.png',   // Top row is water
+                  'images/stone-block.png',   // Row 1 of 3 of stone
+                  'images/stone-block.png',   // Row 2 of 3 of stone
+                  'images/stone-block.png',   // Row 3 of 3 of stone
+                  'images/grass-block.png',   // Row 1 of 2 of grass
+                  'images/grass-block.png'    // Row 2 of 2 of grass
+              ],
+              numRows = 6,
+              numCols = 5,
+              row, col;
 
-        /* Loop through the number of rows and columns we've defined above
-         * and, using the rowImages array, draw the correct image for that
-         * portion of the "grid"
-         */
-        for (row = 0; row < numRows; row++) {
-            for (col = 0; col < numCols; col++) {
-                /* The drawImage function of the canvas' context element
-                 * requires 3 parameters: the image to draw, the x coordinate
-                 * to start drawing and the y coordinate to start drawing.
-                 * We're using our Resources helpers to refer to our images
-                 * so that we get the benefits of caching these images, since
-                 * we're using them over and over.
-                 */
-                ctx.drawImage(Resources.get(rowImages[row]), col * 101, row * 83);
-            }
+          // Before drawing, clear existing canvas
+          ctx.clearRect(0,0,canvas.width,canvas.height)
+
+          /* Loop through the number of rows and columns we've defined above
+           * and, using the rowImages array, draw the correct image for that
+           * portion of the "grid"
+           */
+          for (row = 0; row < numRows; row++) {
+              for (col = 0; col < numCols; col++) {
+                  /* The drawImage function of the canvas' context element
+                   * requires 3 parameters: the image to draw, the x coordinate
+                   * to start drawing and the y coordinate to start drawing.
+                   * We're using our Resources helpers to refer to our images
+                   * so that we get the benefits of caching these images, since
+                   * we're using them over and over.
+                   */
+                  ctx.drawImage(Resources.get(rowImages[row]), col * 101, row * 83);
+              }
+          }
+
+          renderEntities();
         }
 
-        renderEntities();
     }
 
     /* This function is called by the render function and is called on each game
@@ -240,3 +229,9 @@ var Engine = (function(global) {
      */
     global.ctx = ctx;
 })(this);
+
+
+function renderAll(){
+  console.log(this);
+  ctx.drawImage(Resources.get(this.sprite), this.x, this.y,this.sizeX,this.sizeY);
+}

@@ -4,7 +4,7 @@ class MovingObjects{
     this.sprite='images/'+name+'.png';
     this.name=name;
     this.speed=randomInt(70,300);
-    this.x=-150;
+    this.x=-100;
   }
 
   placeInColumns(yDisplacement){ //this is to generate placement in columns randomly
@@ -18,7 +18,9 @@ class MovingObjects{
   }
 
   render() {
-      ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+      if (this.name!=='nothing'){
+        ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+      }
   }
 
   checkCollisions(){
@@ -29,13 +31,41 @@ class MovingObjects{
             player.startingPositionOnGame();
             return false;
           case 'Gem-Blue':
-            console.log('blue');
+            points+=50;
+            allMovingObjects.forEach(function(enemy,index){
+              if (enemy.name==='enemy-bug'){
+                allMovingObjects.splice(index,1);
+              }
+            });
             break;
           case 'Gem-Green':
-            console.log('green');
+          points+=100;
+          allMovingObjects.forEach(function(enemy,index){
+            if (enemy.name==='enemy-bug'){
+              enemy.sprite='images/Star.png';
+              enemy.name='Star';
+              enemySprite='Star';
+              setTimeout(function(){
+                enemySprite='enemy-bug';
+              },5000);
+            }
+          });
             break;
           case 'Gem-Orange':
-          console.log('orange');
+          points+=500;
+          allMovingObjects.forEach(function(enemy,index){
+            if (enemy.name==='enemy-bug'){
+              enemy.speed=0;
+              enemySprite='nothing';
+              setTimeout(function(){
+                enemySprite='enemy-bug';
+                enemy.speed=200;
+              },5000);
+            }
+          });
+          break;
+          case 'Star':
+          points+=1000;
         }
         return true;
       }
@@ -118,6 +148,8 @@ class Players{
 
 
   let allMovingObjects=[];
+  let enemySprite='enemy-bug';
+  let points=0;
 
   const gemIntervalID= window.setInterval(function(){
     const gemValues=[
@@ -131,7 +163,7 @@ class Players{
   },3000);
 
   const bugIntervalID=window.setInterval(function(){
-    let movingBugsInstances= new Enemies('enemy-bug');
+    let movingBugsInstances= new Enemies(enemySprite);
     movingBugsInstances.placeInColumns(-20);
     allMovingObjects.push(movingBugsInstances);
   },1000);

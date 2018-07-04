@@ -119,6 +119,7 @@ var Engine = (function(global) {
     }
 
     Resources.load([
+        'images/Star.png',
         'images/Selector.png',
         'images/char-boy.png',
         'images/char-cat-girl.png',
@@ -142,5 +143,5 @@ var Engine = (function(global) {
 
 
 function renderAll(){
-  ctx.drawImage(Resources.get(this.sprite), this.x, this.y,this.sizeX=101,this.sizeY=200);
+    ctx.drawImage(Resources.get(this.sprite), this.x, this.y,this.sizeX=101,this.sizeY=200);
 }

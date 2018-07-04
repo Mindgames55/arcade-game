@@ -1,16 +1,18 @@
+const rowHeight=83;
+const columnWidth=101;
 // This is the parent class, enemies and gems will inherit from here
 class MovingObjects{
   constructor(name){
     this.sprite='images/'+name+'.png';
     this.name=name;
     this.speed=randomInt(70,300);
-    this.x=-100;
+    this.x=-100;  //intial position off screen
   }
 
   placeInColumns(yDisplacement){ //this is to generate placement in columns randomly
     this.startingY=yDisplacement;  //this value is to center the image on every column (player uses it as well)
     let columnPlacement= randomInt(1,3);
-    this.y=yDisplacement+83*columnPlacement;
+    this.y=yDisplacement+rowHeight*columnPlacement;
   }
 
   update(dt){
@@ -100,10 +102,10 @@ class Selector{
     switch (keyPressed) {
       case 'left':
       console.log('left');
-        this.x-=(this.x!==0)?101:0;
+        this.x-=(this.x!==0)?columnWidth:0;
         break;
       case 'right':
-        this.x+=(this.x!==404)?101:0;
+        this.x+=(this.x!==404)?columnWidth:0;
         break;
       case 'enter':
       return this.x;
@@ -120,22 +122,22 @@ class Players{
   }
 
   startingPositionOnGame(){
-    this.x=101*2;
-    this.y=this.startingY+4*83;
+    this.x=columnWidth*2;
+    this.y=this.startingY+4*rowHeight;
   }
 
-  render(column=this.x/101){
-    this.x=101*column;
+  render(column=this.x/columnWidth){
+    this.x=columnWidth*column;
     renderAll.call(this);
   }
 
   handleInput(keyPressed){
     switch (keyPressed) {
       case 'up':
-        this.y-=(this.y>40)?83:0;
+        this.y-=(this.y>40)?rowHeight:0;
         break;
       case 'down':
-        this.y+=(this.y<(4*83+83/2))?83:0;
+        this.y+=(this.y<(4*rowHeight+rowHeight/2))?rowHeight:0;
         break;
       case 'left':
         this.x-=(this.x>=50.5)?50.5:0;
@@ -206,7 +208,7 @@ class Players{
        let selectedX=selector.handleInput(allowedKeys[e.keyCode]);
        if (selectedX!==undefined){
          document.removeEventListener('keyup',selectChar)
-         player= new Players(avatar[selectedX/101]);
+         player= new Players(avatar[selectedX/columnWidth]);
          player.startingPositionOnGame();
          initial=false;
          document.addEventListener('keyup', moveChar);

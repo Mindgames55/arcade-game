@@ -11,18 +11,14 @@ var Engine = (function(global) {
     canvas.height = 606;
     doc.body.appendChild(canvas);
 
-
-
     function main() {
-
         var now = Date.now(),
             dt = (now - lastTime) / 1000.0;
-          if (!initial){
-            update(dt);
-          }
-          render();
-
-          lastTime = now;
+        if (!initial){
+          update(dt);
+        }
+        render();
+        lastTime = now;
 
         win.requestAnimationFrame(main);
     }
@@ -52,7 +48,7 @@ var Engine = (function(global) {
     function updateEntities(dt) {
         allMovingObjects.forEach(function(enemy, index) {
             enemy.update(dt);
-            //eliminates the only reference to the crossing objectst to make them garbage collectible once the have crossed the screen
+            //eliminates the only reference to the crossing objects to make them garbage collectible once the have crossed the screen
             if (enemy.x>canvas.width){
               let erased=allMovingObjects.splice(index, 1);
             }
@@ -66,9 +62,7 @@ var Engine = (function(global) {
 
 
     function render() {
-
          clear();
-
          if (initial){
            selector.render();
            allAvatar.forEach(function(player, index){
@@ -91,7 +85,7 @@ var Engine = (function(global) {
            for (row = 0; row < numRows; row++) {
                for (col = 0; col < numCols; col++) {
 
-                   ctx.drawImage(Resources.get(rowImages[row]), col * 101, row * 83);
+                   ctx.drawImage(Resources.get(rowImages[row]), col * columnWidth, row * rowHeight);
                }
            }
 
@@ -105,14 +99,11 @@ var Engine = (function(global) {
 
 
     function renderEntities() {
-
         allMovingObjects.forEach(function(enemy) {
             enemy.render();
         });
-
         player.render();
     }
-
 
     function reset() {
         // noop
@@ -137,11 +128,9 @@ var Engine = (function(global) {
     ]);
     Resources.onReady(init);
 
-
     global.ctx = ctx;
 })(this);
 
-
 function renderAll(){
-    ctx.drawImage(Resources.get(this.sprite), this.x, this.y,this.sizeX=101,this.sizeY=200);
+    ctx.drawImage(Resources.get(this.sprite), this.x, this.y,this.sizeX=columnWidth,this.sizeY=200);
 }

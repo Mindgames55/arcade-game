@@ -1,4 +1,4 @@
-
+let initial;
 var Engine = (function(global) {
 
     var doc = global.document,
@@ -11,34 +11,15 @@ var Engine = (function(global) {
     canvas.height = 606;
     doc.body.appendChild(canvas);
 
-    function renderPlayerSelection(){
-      clear();
-      let avatar=[
-        'char-boy',
-        'char-cat-girl',
-        'char-horn-girl',
-        'char-pink-girl',
-        'char-princess-girl'
-      ];
-      selector.render();
-      for (let i=0;i<5;i++){
-        let player= new Players(avatar[i]);
-        avatar.splice(i,1,player);
-      }
-      avatar.forEach(function(player, index){
-        player.render(index);
-      })
-      win.requestAnimationFrame(renderPlayerSelection);
-
-    }
 
 
     function main() {
 
         var now = Date.now(),
             dt = (now - lastTime) / 1000.0;
-
-          update(dt);
+          if (!initial){
+            update(dt);
+          }
           render();
 
           lastTime = now;
@@ -50,7 +31,7 @@ var Engine = (function(global) {
         reset();
         lastTime = Date.now();
         initial=true;
-        renderPlayerSelection();
+        main();
     }
 
 
@@ -88,28 +69,36 @@ var Engine = (function(global) {
 
          clear();
 
+         if (initial){
+           selector.render();
+           allAvatar.forEach(function(player, index){
+             player.render(index);
+           })
+         }
+         else {
+           var rowImages = [
+                   'images/water-block.png',   // Top row is water
+                   'images/stone-block.png',   // Row 1 of 3 of stone
+                   'images/stone-block.png',   // Row 2 of 3 of stone
+                   'images/stone-block.png',   // Row 3 of 3 of stone
+                   'images/grass-block.png',   // Row 1 of 2 of grass
+                   'images/grass-block.png'    // Row 2 of 2 of grass
+               ],
+               numRows = 6,
+               numCols = 5,
+               row, col;
+
+           for (row = 0; row < numRows; row++) {
+               for (col = 0; col < numCols; col++) {
+
+                   ctx.drawImage(Resources.get(rowImages[row]), col * 101, row * 83);
+               }
+           }
+
+         renderEntities();
+         }
 
 
-          var rowImages = [
-                  'images/water-block.png',   // Top row is water
-                  'images/stone-block.png',   // Row 1 of 3 of stone
-                  'images/stone-block.png',   // Row 2 of 3 of stone
-                  'images/stone-block.png',   // Row 3 of 3 of stone
-                  'images/grass-block.png',   // Row 1 of 2 of grass
-                  'images/grass-block.png'    // Row 2 of 2 of grass
-              ],
-              numRows = 6,
-              numCols = 5,
-              row, col;
-
-          for (row = 0; row < numRows; row++) {
-              for (col = 0; col < numCols; col++) {
-
-                  ctx.drawImage(Resources.get(rowImages[row]), col * 101, row * 83);
-              }
-          }
-
-        renderEntities();
 
 
     }

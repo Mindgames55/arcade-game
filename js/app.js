@@ -86,7 +86,6 @@ class Players{
   constructor(fileName){
     this.sprite='images/'+fileName+'.png';
     this.startingY=-30;
-    this.x=101;
     this.y=300;
   }
 
@@ -95,8 +94,8 @@ class Players{
     this.y=this.startingY+4*83;
   }
 
-  render(column){
-    this.x*=column;
+  render(column=this.x/101){
+    this.x=101*column;
     renderAll.call(this);
   }
 
@@ -137,21 +136,52 @@ class Players{
     allMovingObjects.push(movingBugsInstances);
   },1000);
 
+  const allAvatar=[];
   const selector= new Selector('Selector');
+  let avatar=[
+    'char-boy',
+    'char-cat-girl',
+    'char-horn-girl',
+    'char-pink-girl',
+    'char-princess-girl'
+  ];
+  for (let i=0;i<avatar.length;i++){
+    let player= new Players(avatar[i]);
+    allAvatar.push(player);
+  }
+  let player;
 
-  document.addEventListener('keyup', function(e) {
+  const moveChar= function(e){
+    var allowedKeys = {
+      37: 'left',
+      38: 'up',
+      39: 'right',
+      40: 'down'
+    }
+    console.log(player.x);
+    player.handleInput(allowedKeys[e.keyCode])
+  }
+
+
+  const selectChar= function (e) {
       var allowedKeys = {
           37: 'left',
-          38: 'up',
           39: 'right',
-          40: 'down',
           13: 'enter'
       };
 
 
        let selectedX=selector.handleInput(allowedKeys[e.keyCode]);
-       console.log(selectedX);
-  });
+       if (selectedX!==undefined){
+         document.removeEventListener('keyup',selectChar)
+         player= new Players(avatar[selectedX/101]);
+         player.startingPositionOnGame();
+         initial=false;
+         document.addEventListener('keyup', moveChar);
+       }
+  }
+
+  document.addEventListener('keyup', selectChar );
 
 
 //returns a random integer between min-max both inclusive

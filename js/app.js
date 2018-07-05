@@ -117,7 +117,7 @@ class Selector{
 class Players{
   constructor(fileName){
     this.sprite='images/'+fileName+'.png';
-    this.startingY=-30;
+    this.startingY=-50;
     this.y=300;
   }
 
@@ -131,10 +131,16 @@ class Players{
     renderAll.call(this);
   }
 
+  checkIfWon(){
+    if (this.x===winKey.x && this.y<0){
+      win();
+    }
+  }
+
   handleInput(keyPressed){
     switch (keyPressed) {
       case 'up':
-        this.y-=(this.y>40)?rowHeight:0;
+        this.y-=(this.y>10)?rowHeight:0;
         break;
       case 'down':
         this.y+=(this.y<(4*rowHeight+rowHeight/2))?rowHeight:0;
@@ -145,6 +151,20 @@ class Players{
       case 'right':
         this.x+=(this.x<400)?50.5:0;
     }
+    this.checkIfWon();
+  }
+
+}
+
+class Key{
+  constructor(name){
+    this.sprite=('images/'+name+'.png');
+    this.x=101*randomInt(0, 4);
+    this.y=30;
+  }
+
+  render(){
+    ctx.drawImage(Resources.get(this.sprite), this.x, this.y,100,100);
   }
 }
 
@@ -154,20 +174,24 @@ class Players{
   let points=0;
 
   const gemIntervalID= window.setInterval(function(){
-    const gemValues=[
-      'Gem-Blue',
-      'Gem-Green',
-      'Gem-Orange'
-    ];
-    let movingGemInstances= new Gems(gemValues[randomInt(0,2)]);  //generates gems randomly
-    movingGemInstances.placeInColumns(41.5);
-    allMovingObjects.push(movingGemInstances);
+    if (!initial){
+      const gemValues=[
+        'Gem-Blue',
+        'Gem-Green',
+        'Gem-Orange'
+      ];
+      let movingGemInstances= new Gems(gemValues[randomInt(0,2)]);  //generates gems randomly
+      movingGemInstances.placeInColumns(41.5);
+      allMovingObjects.push(movingGemInstances);
+    }
   },3000);
 
   const bugIntervalID=window.setInterval(function(){
-    let movingBugsInstances= new Enemies(enemySprite);
-    movingBugsInstances.placeInColumns(-20);
-    allMovingObjects.push(movingBugsInstances);
+    if (!initial){
+      let movingBugsInstances= new Enemies(enemySprite);
+      movingBugsInstances.placeInColumns(-20);
+      allMovingObjects.push(movingBugsInstances);
+    }
   },1000);
 
   const allAvatar=[];
@@ -183,7 +207,8 @@ class Players{
     let player= new Players(avatar[i]);
     allAvatar.push(player);
   }
-  let player;
+  let player,
+      winKey;
 
   const moveChar= function(e){
     var allowedKeys = {
@@ -192,7 +217,6 @@ class Players{
       39: 'right',
       40: 'down'
     }
-    console.log(player.x);
     player.handleInput(allowedKeys[e.keyCode])
   }
 
@@ -209,6 +233,7 @@ class Players{
        if (selectedX!==undefined){
          document.removeEventListener('keyup',selectChar)
          player= new Players(avatar[selectedX/columnWidth]);
+         winKey= new Key('Key');
          player.startingPositionOnGame();
          initial=false;
          document.addEventListener('keyup', moveChar);
@@ -217,7 +242,22 @@ class Players{
 
   document.addEventListener('keyup', selectChar );
 
+  function win(){
+    clearInterval(gemIntervalID);
+    clearInterval(bugIntervalID);
+    const canvas=document.getElementById('canvas');
+    canvas.classList.add('hidden');
+    winDiv= document.createElement('div');
+    winDiv.innerHTML=`<h1>You won with ${points} points!</h1>
+                      <button id="play-again">Play Again</button>`;
+    document.body.appendChild(winDiv);
+    const button=document.getElementById('play-again');
+    button.addEventListener("click",reloading);
+  }
 
+function reloading(){
+  location.reload();
+}
 //returns a random integer between min-max both inclusive
 function randomInt(min, max){
   return Math.floor(Math.random()*(max-min+1)+min);

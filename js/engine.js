@@ -10,6 +10,7 @@ var Engine = (function(global) {
     canvas.width = 505;
     canvas.height = 606;
     doc.body.appendChild(canvas);
+    canvas.setAttribute('id','canvas');
 
     function main() {
         var now = Date.now(),
@@ -103,6 +104,7 @@ var Engine = (function(global) {
             enemy.render();
         });
         player.render();
+        winKey.render();
     }
 
     function reset() {
@@ -121,6 +123,7 @@ var Engine = (function(global) {
         'images/Gem-Green.png',
         'images/Gem-Orange.png',
         'images/stone-block.png',
+        'images/Key.png',
         'images/water-block.png',
         'images/grass-block.png',
         'images/enemy-bug.png',

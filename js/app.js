@@ -31,6 +31,9 @@ class MovingObjects{
         switch (this.name){
           case 'enemy-bug':
             player.startingPositionOnGame();
+            if (removeLives()===2){
+              alert('You have one more live to spare, you can either keep collecting points or go for the key and win the game. Just keep in mind that if you choose keep playing and you die, you will loose all of your points :(');
+            }
             return false;
           case 'Gem-Blue':
             points+=50;
@@ -83,6 +86,19 @@ class Gems extends MovingObjects{
   render(){
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y,80,80);
   }
+}
+
+class Hearts{
+  constructor(x){
+    this.y=-15;
+    this.x=x;
+    this.sprite='images/Heart.png';
+  }
+
+  render(){
+    ctx.drawImage(Resources.get(this.sprite), this.x, this.y,50,70);
+  }
+
 }
 
 class Selector{
@@ -170,6 +186,7 @@ class Key{
 
 
   let allMovingObjects=[];
+  let allHearts=[];
   let enemySprite='enemy-bug';
   let points=0;
 
@@ -237,6 +254,10 @@ class Key{
          player= new Players(avatar[selectedX/columnWidth]);
          winKey= new Key('Key');
          player.startingPositionOnGame();
+         for (let i=0;i<3;i++){
+           let hearts=new Hearts(50*i);
+           allHearts.push(hearts);
+         }
          initial=false;
          document.addEventListener('keyup', moveChar);
        }
@@ -260,6 +281,13 @@ class Key{
 function reloading(){
   location.reload();
 }
+
+let removeLives=(function(){
+  let counter=1;
+  return function addOne(){
+    allHearts.pop();
+    return counter++}
+})();
 //returns a random integer between min-max both inclusive
 function randomInt(min, max){
   return Math.floor(Math.random()*(max-min+1)+min);

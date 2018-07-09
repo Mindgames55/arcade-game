@@ -111,6 +111,9 @@ var Engine = (function(global) {
         allMovingObjects.forEach(function(enemy) {
             enemy.render();
         });
+        allHearts.forEach(function(live) {
+            live.render();
+        });
         player.render();
         winKey.render();
     }
@@ -120,6 +123,7 @@ var Engine = (function(global) {
     }
 
     Resources.load([
+        'images/Heart.png',
         'images/Star.png',
         'images/Selector.png',
         'images/char-boy.png',

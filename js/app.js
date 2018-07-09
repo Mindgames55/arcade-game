@@ -31,9 +31,14 @@ class MovingObjects{
         switch (this.name){
           case 'enemy-bug':
             player.startingPositionOnGame();
-            if (removeLives()===2){
-              alert('You have one more live to spare, you can either keep collecting points or go for the key and win the game. Just keep in mind that if you choose keep playing and you die, you will loose all of your points :(');
+            switch (removeLives()) {
+              case 2:
+                alert('You have one more live to spare, you can either keep collecting points or go for the key and win the game. Just keep in mind that if you choose keep playing and you die, you will loose all of your points :(');
+                break;
+              case 3:
+                winOrLoose('LOST', 'NO');
             }
+
             return false;
           case 'Gem-Blue':
             points+=50;
@@ -149,7 +154,7 @@ class Players{
 
   checkIfWon(){
     if (this.x===winKey.x && this.y<0){
-      win();
+      winOrLoose('won', points);
     }
   }
 
@@ -265,14 +270,15 @@ class Key{
 
   document.addEventListener('keyup', selectChar );
 
-  function win(){
+  function winOrLoose(action, points){
+    const string=`<h1>You ${action} with ${points} points!</h1>
+                      <button id="play-again">Play Again</button>`;
     clearInterval(gemIntervalID);
     clearInterval(bugIntervalID);
     const canvas=document.getElementById('canvas');
     canvas.classList.add('hidden');
     winDiv= document.createElement('div');
-    winDiv.innerHTML=`<h1>You won with ${points} points!</h1>
-                      <button id="play-again">Play Again</button>`;
+    winDiv.innerHTML=string;
     document.body.appendChild(winDiv);
     const button=document.getElementById('play-again');
     button.addEventListener("click",reloading);

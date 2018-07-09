@@ -41,7 +41,7 @@ class MovingObjects{
 
             return false;
           case 'Gem-Blue':
-            points+=50;
+            pointsCollected.increasePoints(50);
             allMovingObjects.forEach(function(enemy,index){
               if (enemy.name==='enemy-bug'){
                 allMovingObjects.splice(index,1);
@@ -49,7 +49,7 @@ class MovingObjects{
             });
             break;
           case 'Gem-Green':
-          points+=100;
+          pointsCollected.increasePoints(100);
           allMovingObjects.forEach(function(enemy,index){
             if (enemy.name==='enemy-bug'){
               enemy.sprite='images/Star.png';
@@ -62,7 +62,7 @@ class MovingObjects{
           });
             break;
           case 'Gem-Orange':
-          points+=500;
+          pointsCollected.increasePoints(500);
           allMovingObjects.forEach(function(enemy,index){
             if (enemy.name==='enemy-bug'){
               enemy.speed=0;
@@ -75,7 +75,7 @@ class MovingObjects{
           });
           break;
           case 'Star':
-          points+=1000;
+          pointsCollected.increasePoints(1000);
         }
         return true;
       }
@@ -106,6 +106,26 @@ class Hearts{
 
 }
 
+class Points{
+  constructor(){
+    this.y=30;
+    this.points=0;
+    this.text='Points: 0';
+  }
+
+  increasePoints(points){
+    this.points+=points;
+    this.text=`Points: ${this.points}`;
+  }
+
+  render(){
+    ctx.font= "30px serif";
+    this.x=ctx.measureText(this.text).width;
+    ctx.fillText(this.text,505-this.x,this.y);
+  }
+
+}
+
 class Selector{
   constructor(fileName){
     this.sprite='images/'+fileName+'.png';
@@ -122,7 +142,6 @@ class Selector{
   handleInput(keyPressed){
     switch (keyPressed) {
       case 'left':
-      console.log('left');
         this.x-=(this.x!==0)?columnWidth:0;
         break;
       case 'right':
@@ -164,7 +183,7 @@ class Players{
         this.y-=(this.y>10)?rowHeight:0;
         break;
       case 'down':
-        this.y+=(this.y<(4*rowHeight+rowHeight/2))?rowHeight:0;
+        this.y+=(this.y<(4*rowHeight))?rowHeight:0;
         break;
       case 'left':
         this.x-=(this.x>=50.5)?50.5:0;
@@ -230,7 +249,8 @@ class Key{
     allAvatar.push(player);
   }
   let player,
-      winKey;
+      winKey,
+      pointsCollected;
 
   const moveChar= function(e){
     var allowedKeys = {
@@ -255,10 +275,16 @@ class Key{
        if (selectedX!==undefined){
          document.removeEventListener('keyup',selectChar)
          const gameHeader=document.querySelector('.header');
+         document.getElementById('canvas').className='canvas-on-game';
          gameHeader.className='game-header';
+         gameHeader.innerHTML=`<img src="images/Gem-Blue.png"></img> + 50
+                                <img src="images/Gem-Green.png"></img> + 100
+                                <img src="images/Gem-Orange.png"></img> + 500
+                                <img src="images/Star.png"></img> + 1000`;
          player= new Players(avatar[selectedX/columnWidth]);
          winKey= new Key('Key');
          player.startingPositionOnGame();
+         pointsCollected=new Points();
          for (let i=0;i<3;i++){
            let hearts=new Hearts(50*i);
            allHearts.push(hearts);

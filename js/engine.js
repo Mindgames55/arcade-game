@@ -114,6 +114,7 @@ var Engine = (function(global) {
         allHearts.forEach(function(live) {
             live.render();
         });
+        pointsCollected.render();
         player.render();
         winKey.render();
     }

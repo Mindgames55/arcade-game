@@ -1,5 +1,12 @@
 body {
     text-align: center;
+    width: 700px;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 50px;
 }
 
 .hidden {
@@ -19,7 +26,15 @@ body {
 }
 
 .game-header{
-  margin: 0;
+  width: 20%;
+}
+
+.game-header img{
+  width: 60px;
+}
+
+.canvas-on-game{
+  width: 70%;
 }
 
 .header h1{

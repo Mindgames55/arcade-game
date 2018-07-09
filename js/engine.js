@@ -8,7 +8,7 @@ var Engine = (function(global) {
         lastTime;
 
     canvas.width = 505;
-    canvas.height = 606;
+    canvas.height = 406;
     doc.body.appendChild(canvas);
     canvas.setAttribute('id','canvas');
 
@@ -71,6 +71,7 @@ var Engine = (function(global) {
            })
          }
          else {
+           canvas.height=606;
            var rowImages = [
                    'images/water-block.png',   // Top row is water
                    'images/stone-block.png',   // Row 1 of 3 of stone

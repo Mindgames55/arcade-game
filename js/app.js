@@ -89,7 +89,7 @@ class Selector{
   constructor(fileName){
     this.sprite='images/'+fileName+'.png';
     this.x=0;
-    this.y=310;
+    this.y=110;
     this.sizeX=100;
     this.sizeY=90;
   }
@@ -118,7 +118,7 @@ class Players{
   constructor(fileName){
     this.sprite='images/'+fileName+'.png';
     this.startingY=-50;
-    this.y=300;
+    this.y=100;
   }
 
   startingPositionOnGame(){

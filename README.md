@@ -1,6 +1,25 @@
-frontend-nanodegree-arcade-game
-===============================
+# Project Title
 
-Students should use this [rubric](https://review.udacity.com/#!/projects/2696458597/rubric) for self-checking their submission. Make sure the functions you write are **object-oriented** - either class functions (like Player and Enemy) or class prototype functions such as Enemy.prototype.checkCollisions, and that the keyword 'this' is used appropriately within your class and class prototype functions to refer to the object the function is called upon. Also be sure that the **readme.md** file is updated with your instructions on both how to 1. Run and 2. Play your arcade game.
+Arcade game
 
-For detailed instructions on how to get started, check out this [guide](https://docs.google.com/document/d/1v01aScPjSWCCWQLIpFqvg3-vXLH2e8_SZQKC8jNO0Dc/pub?embedded=true).
+## How to Play
+
+The main goal of the game is to score the highest amount of points as possible by collecting gems and stars. Try to avoid colliding with
+the moving bugs while collecting the items. You have 3 lives (hearts). Now, if you loose them all you loose your points as well, so it is up to you when to stop collecting (scoring) items and to grab the key which finishes the game. Every gem has a different behavior. Go and play to discover what every one of those gems does, and again watch out with the BUGS :)
+
+### What you'll need
+
+Good news! you just need a browser and the ability to move your fingers fast :D
+
+
+## Tecnical info
+
+Functionalities on this game were created using javascript.
+
+## Acknowledgements
+* [Udacity](https://github.com/udacity/frontend-nanodegree-arcade-game) - For providing the starting engine. 
+
+
+## Author
+
+* **Mayguen Ojeda** - *Udacity third project*

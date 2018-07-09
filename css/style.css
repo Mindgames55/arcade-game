@@ -5,3 +5,26 @@ body {
 .hidden {
   display: none;
 }
+
+.header-img{
+  width: 100px;
+}
+
+#left-arrow{
+  transform: rotateY(180deg);
+}
+
+.header{
+  margin-top: 100px;
+}
+
+.game-header{
+  margin: 0;
+}
+
+.header h1{
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

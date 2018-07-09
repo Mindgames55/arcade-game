@@ -7,8 +7,15 @@ var Engine = (function(global) {
         ctx = canvas.getContext('2d'),
         lastTime;
 
+    let header=document.createElement('div');
+    header.innerHTML=`<h1>Select your avatar using  <img id='left-arrow' class="header-img" src="https://carwad.net/sites/default/files/cartoon-arrow-104409-6060131.png"></img> <img class="header-img" src="https://carwad.net/sites/default/files/cartoon-arrow-104409-6060131.png"></img>
+                      Then press <img class="header-img" src="images/enter.png"></img></h1>`;
+    header.className='header';
+
+    doc.body.appendChild(header);
+
     canvas.width = 505;
-    canvas.height = 406;
+    canvas.height = 306;
     doc.body.appendChild(canvas);
     canvas.setAttribute('id','canvas');
 

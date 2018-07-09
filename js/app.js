@@ -89,7 +89,7 @@ class Selector{
   constructor(fileName){
     this.sprite='images/'+fileName+'.png';
     this.x=0;
-    this.y=110;
+    this.y=10;
     this.sizeX=100;
     this.sizeY=90;
   }
@@ -118,7 +118,7 @@ class Players{
   constructor(fileName){
     this.sprite='images/'+fileName+'.png';
     this.startingY=-50;
-    this.y=100;
+    this.y=0;
   }
 
   startingPositionOnGame(){
@@ -232,6 +232,8 @@ class Key{
        let selectedX=selector.handleInput(allowedKeys[e.keyCode]);
        if (selectedX!==undefined){
          document.removeEventListener('keyup',selectChar)
+         const gameHeader=document.querySelector('.header');
+         gameHeader.className='game-header';
          player= new Players(avatar[selectedX/columnWidth]);
          winKey= new Key('Key');
          player.startingPositionOnGame();

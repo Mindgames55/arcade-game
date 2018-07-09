@@ -11,7 +11,6 @@ var Engine = (function(global) {
     header.innerHTML=`<h1>Select your avatar using  <img id='left-arrow' class="header-img" src="https://carwad.net/sites/default/files/cartoon-arrow-104409-6060131.png"></img> <img class="header-img" src="https://carwad.net/sites/default/files/cartoon-arrow-104409-6060131.png"></img>
                       Then press <img class="header-img" src="images/enter.png"></img></h1>`;
     header.className='header';
-
     doc.body.appendChild(header);
 
     canvas.width = 505;
@@ -32,12 +31,10 @@ var Engine = (function(global) {
     }
 
     function init() {
-        reset();
         lastTime = Date.now();
         initial=true;
         main();
     }
-
 
     function update(dt) {
         updateEntities(dt);
@@ -47,11 +44,10 @@ var Engine = (function(global) {
     function checkCollisions(){
       allMovingObjects.forEach(function(enemy, index){
         if (enemy.checkCollisions()){
-          allMovingObjects.splice(index, 1);  //hchange
+          allMovingObjects.splice(index, 1);
         }
       })
     }
-
 
     function updateEntities(dt) {
         allMovingObjects.forEach(function(enemy, index) {
@@ -63,21 +59,19 @@ var Engine = (function(global) {
         });
     }
 
-
     function clear(){
       ctx.clearRect(0,0,canvas.width,canvas.height);
     }
 
-
     function render() {
          clear();
-         if (initial){
+         if (initial){  //displays character selection menu
            selector.render();
            allAvatar.forEach(function(player, index){
              player.render(index);
            })
          }
-         else {
+         else {  //game on rendering
            canvas.height=606;
            var rowImages = [
                    'images/water-block.png',   // Top row is water
@@ -100,12 +94,7 @@ var Engine = (function(global) {
 
          renderEntities();
          }
-
-
-
-
     }
-
 
     function renderEntities() {
         allMovingObjects.forEach(function(enemy) {
@@ -117,10 +106,6 @@ var Engine = (function(global) {
         pointsCollected.render();
         player.render();
         winKey.render();
-    }
-
-    function reset() {
-        // noop
     }
 
     Resources.load([

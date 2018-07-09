@@ -1,7 +1,12 @@
+//global
 const rowHeight=83;
 const columnWidth=101;
 let leadersOnArcade;
 const leadersBoardBody=document.createElement('div');
+let allMovingObjects=[];
+let allHearts=[];
+let enemySprite='enemy-bug';
+let points=0;
 
 if (typeof(Storage) !== "undefined"){
   if (JSON.parse(localStorage.getItem("leadersOnArcade"))!==null){
@@ -51,7 +56,6 @@ class MovingObjects{
               case 3:
                 winOrLoose('LOST', 'NO');
             }
-
             return false;
           case 'Gem-Blue':
             pointsCollected.increasePoints(50);
@@ -65,7 +69,7 @@ class MovingObjects{
           pointsCollected.increasePoints(100);
           allMovingObjects.forEach(function(enemy,index){
             if (enemy.name==='enemy-bug'){
-              enemy.sprite='images/Star.png';
+              enemy.sprite='images/Star.png';  //turn enemies into collectible stars for 5seconds
               enemy.name='Star';
               enemySprite='Star';
               setTimeout(function(){
@@ -90,14 +94,9 @@ class MovingObjects{
           case 'Star':
           pointsCollected.increasePoints(1000);
         }
-        return true;
+        return true;  //remove the collectible items once collected
       }
   }
-
-}
-
-class Enemies extends MovingObjects{
-
 }
 
 class Gems extends MovingObjects{
@@ -116,7 +115,6 @@ class Hearts{
   render(){
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y,50,70);
   }
-
 }
 
 class Points{
@@ -136,7 +134,6 @@ class Points{
     this.x=ctx.measureText(this.text).width;
     ctx.fillText(this.text,505-this.x,this.y);
   }
-
 }
 
 class Selector{
@@ -164,7 +161,6 @@ class Selector{
       return this.x;
     }
   }
-
 }
 
 class Players{
@@ -221,12 +217,6 @@ class Key{
   }
 }
 
-
-  let allMovingObjects=[];
-  let allHearts=[];
-  let enemySprite='enemy-bug';
-  let points=0;
-
   const gemIntervalID= window.setInterval(function(){
     if (!initial){
       const gemValues=[
@@ -242,7 +232,7 @@ class Key{
 
   const bugIntervalID=window.setInterval(function(){
     if (!initial){
-      let movingBugsInstances= new Enemies(enemySprite);
+      let movingBugsInstances= new MovingObjects(enemySprite);
       movingBugsInstances.placeInColumns(-20);
       allMovingObjects.push(movingBugsInstances);
     }
@@ -275,14 +265,12 @@ class Key{
     player.handleInput(allowedKeys[e.keyCode])
   }
 
-
   const selectChar= function (e) {
       var allowedKeys = {
           37: 'left',
           39: 'right',
           13: 'enter'
       };
-
 
        let selectedX=selector.handleInput(allowedKeys[e.keyCode]);
        if (selectedX!==undefined){

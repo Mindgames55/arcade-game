@@ -1,5 +1,18 @@
 const rowHeight=83;
 const columnWidth=101;
+let leadersOnArcade;
+const leadersBoardBody=document.createElement('div');
+
+if (typeof(Storage) !== "undefined"){
+  if (JSON.parse(localStorage.getItem("leadersOnArcade"))!==null){
+    leadersOnArcade=JSON.parse(localStorage.getItem("leadersOnArcade"));
+  }
+  else {
+    leadersOnArcade=[];
+    localStorage.setItem("leadersOnArcade", JSON.stringify(leadersOnArcade));
+  }
+}
+
 // This is the parent class, enemies and gems will inherit from here
 class MovingObjects{
   constructor(name){
@@ -173,7 +186,7 @@ class Players{
 
   checkIfWon(){
     if (this.x===winKey.x && this.y<0){
-      winOrLoose('won', points);
+      winOrLoose('won', pointsCollected.points);
     }
   }
 
@@ -273,7 +286,10 @@ class Key{
 
        let selectedX=selector.handleInput(allowedKeys[e.keyCode]);
        if (selectedX!==undefined){
-         document.removeEventListener('keyup',selectChar)
+         document.removeEventListener('keyup',selectChar);
+         leadersBoardBody.className='board';
+         document.body.appendChild(leadersBoardBody);
+
          const gameHeader=document.querySelector('.header');
          document.getElementById('canvas').className='canvas-on-game';
          gameHeader.className='game-header';
@@ -281,6 +297,8 @@ class Key{
                                 <img src="images/Gem-Green.png"></img> + 100
                                 <img src="images/Gem-Orange.png"></img> + 500
                                 <img src="images/Star.png"></img> + 1000`;
+
+         createBoardOnPage(leadersOnArcade, true);
          player= new Players(avatar[selectedX/columnWidth]);
          winKey= new Key('Key');
          player.startingPositionOnGame();
@@ -303,11 +321,29 @@ class Key{
     clearInterval(bugIntervalID);
     const canvas=document.getElementById('canvas');
     canvas.classList.add('hidden');
+    document.querySelector('.game-header').classList.add('hidden');
     winDiv= document.createElement('div');
     winDiv.innerHTML=string;
     document.body.appendChild(winDiv);
     const button=document.getElementById('play-again');
     button.addEventListener("click",reloading);
+
+    const leaderBoardOnWin= document.createElement('div');
+    leaderBoardOnWin.className= 'win-board';
+    leaderBoardOnWin.innerHTML= `<div class="board-header"><p>Leader</p><p>Points</p></div>`;
+    leadersBoardBody.className='leader-bodyOnWin';
+    leaderBoardOnWin.appendChild(leadersBoardBody);
+
+    document.body.appendChild(leaderBoardOnWin);
+
+    if (typeof(Storage) !== "undefined"){
+      if (pointsCollected.points>=localStorage.getItem("master")||JSON.parse(localStorage.getItem("leadersOnArcade")).length<5){
+        createBoard();
+      }
+    }
+    else {
+      createBoardOnPage([],false);
+    }
   }
 
 function reloading(){
@@ -324,3 +360,63 @@ let removeLives=(function(){
 function randomInt(min, max){
   return Math.floor(Math.random()*(max-min+1)+min);
 }
+
+//displays the pop up box to get the name of a new record
+  function getLeaderName(){
+    const person = prompt("You have set a new record, enter your name:", "Arcade Game Master");
+    if (person !== null && person !== "") {
+      return person;
+    }
+  }
+
+  //creates an object with the data of the user with a new record
+    class Leader{
+      constructor(){
+        this.name= getLeaderName();
+        this.points=pointsCollected.points;
+      }
+  }
+
+  //creates the board and storages it on local storage
+  function createBoard(){
+    let leaderEntrance= new Leader();
+    if (leadersOnArcade.length>=5){
+
+      leadersOnArcade.splice(-1,1,leaderEntrance);
+    }
+    else {
+      leadersOnArcade.push(leaderEntrance);
+    }
+    orderLeaderBoard(leadersOnArcade);
+    localStorage.setItem("leadersOnArcade", JSON.stringify(leadersOnArcade));
+    leaderEntries=JSON.parse(localStorage.getItem("leadersOnArcade"));
+    localStorage.setItem("master",leaderEntries[leaderEntries.length-1].points);
+    createBoardOnPage(leaderEntries, true);
+  }
+
+  //sorts by number of moves. In case they are equal it is sorted by time.
+    function orderLeaderBoard(objects){
+      objects.sort(function(a, b){return (a.points-b.points<0)?1:((a.points-b.points>0))?-1:0});
+    }
+
+    //adds the board to the DOM
+      function createBoardOnPage(users,value){
+        leadersBoardBody.innerHTML=[];
+        if (value){
+          let piece=document.createDocumentFragment();
+          for (i=0;i<users.length;i++){
+            let name=document.createElement('p');
+            name.textContent=users[i].name;
+            let points=document.createElement('p');
+            points.textContent=users[i].points;
+            name.className='leader-name';
+            points.className='leader-points';
+            piece.appendChild(name);
+            piece.appendChild(points);
+          }
+          leadersBoardBody.appendChild(piece);
+        }
+        else {
+          leadersBoardBody.innerHTML='<p>Local storage is not supported by your browser. It is not possible to generate a Leaderboard</p>'
+        }
+      }

@@ -1,6 +1,6 @@
 body {
     text-align: center;
-    width: 700px;
+    width: 800px;
     margin: auto;
     display: flex;
     align-items: center;
@@ -26,7 +26,7 @@ body {
 }
 
 .game-header{
-  width: 20%;
+  width: 15%;
 }
 
 .game-header img{
@@ -34,8 +34,56 @@ body {
 }
 
 .canvas-on-game{
-  width: 70%;
+  width: 60%;
 }
+
+.board{
+  width: 20%;
+}
+
+.leader-bodyOnWin,
+.board,
+.board-header {
+  padding: 10px;
+  display: grid;
+  grid-template-columns: 4fr 1fr;
+  font-size: 20px;
+  text-transform: capitalize;
+}
+
+.board-header,
+button {
+  background-color: #55a86d;
+  color: #fff;
+}
+
+button {
+  width: 150px;
+  border: 3px solid green;
+  border-radius: 4px;
+  padding: 10px;
+  font-size: 22px;
+}
+
+.win-board{
+  border: 3px solid green;
+  margin-top: 40px;
+  text-align: left;
+  border-radius: 4px;
+}
+
+
+.board p:nth-child(even){
+  font-weight: bold;
+}
+
+.win-board{
+  width: 70%;
+  display: grid;
+  grid-template-rows: auto;
+}
+
+
 
 .header h1{
   text-align: center;

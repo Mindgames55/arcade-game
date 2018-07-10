@@ -309,6 +309,7 @@ function winOrLoose(action, points){  //game-over behavior (win or loose)
                     <button id="play-again">Play Again</button>`;
   clearInterval(gemIntervalID);
   clearInterval(bugIntervalID);
+  document.removeEventListener('keyup',moveChar);
   const canvas=document.getElementById('canvas');
   canvas.classList.add('hidden');
   document.querySelector('.game-header').classList.add('hidden');

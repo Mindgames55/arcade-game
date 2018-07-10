@@ -6,6 +6,7 @@ const leadersBoardBody=document.createElement('div');
 let allMovingObjects=[];
 let allHearts=[];
 let enemySprite='enemy-bug';
+let selectedX;
 
 //load the leaders array
 if (typeof(Storage) !== "undefined"){
@@ -274,32 +275,37 @@ const selectChar= function (e) {  //movement of selector to choose avatar
         13: 'enter'
     };
 
-     let selectedX=selector.handleInput(allowedKeys[e.keyCode]);
-     if (selectedX!==undefined){  //avatar has been chosen
-       document.removeEventListener('keyup',selectChar);
-       leadersBoardBody.className='board';
-       document.body.appendChild(leadersBoardBody);
+      selectedX=selector.handleInput(allowedKeys[e.keyCode]);
+      AvatarSelected();
+}
 
-       const gameHeader=document.querySelector('.header');
-       document.getElementById('canvas').className='canvas-on-game';
-       gameHeader.className='game-header';
-       gameHeader.innerHTML=`<img src="images/Gem-Blue.png"></img> + 50
-                              <img src="images/Gem-Green.png"></img> + 100
-                              <img src="images/Gem-Orange.png"></img> + 500
-                              <img src="images/Star.png"></img> + 1000`;  //gems legend
+function AvatarSelected(){
+  if (selectedX!==undefined){  //avatar has been chosen
+    document.removeEventListener('keyup',selectChar);
 
-       createBoardOnPage(leadersOnArcade, true);  //creates leaders board aside of the canvas
-       player= new Players(avatar[selectedX/columnWidth]);  //instantiate player passing the sprite name
-       winKey= new Key('Key');  //instantiate the key (win)
-       player.startingPositionOnGame();
-       pointsCollected=new Points();  //instantiate the points object
-       for (let i=0;i<3;i++){  //instantiate the lives
-         let hearts=new Hearts(50*i);
-         allHearts.push(hearts);
-       }
-       initial=false;
-       document.addEventListener('keyup', moveChar);
-     }
+    leadersBoardBody.className='board';
+    document.body.appendChild(leadersBoardBody);
+
+    const gameHeader=document.querySelector('.header');
+    document.getElementById('canvas').className='canvas-on-game';
+    gameHeader.className='game-header';
+    gameHeader.innerHTML=`<img src="images/Gem-Blue.png"></img> + 50
+                           <img src="images/Gem-Green.png"></img> + 100
+                           <img src="images/Gem-Orange.png"></img> + 500
+                           <img src="images/Star.png"></img> + 1000`;  //gems legend
+
+    createBoardOnPage(leadersOnArcade, true);  //creates leaders board aside of the canvas
+    player= new Players(avatar[selectedX/columnWidth]);  //instantiate player passing the sprite name
+    winKey= new Key('Key');  //instantiate the key (win)
+    player.startingPositionOnGame();
+    pointsCollected=new Points();  //instantiate the points object
+    for (let i=0;i<3;i++){  //instantiate the lives
+      let hearts=new Hearts(50*i);
+      allHearts.push(hearts);
+    }
+    initial=false;
+    document.addEventListener('keyup', moveChar);
+  }
 }
 
 document.addEventListener('keyup', selectChar );
@@ -318,6 +324,7 @@ function winOrLoose(action, points){  //game-over behavior (win or loose)
   document.body.appendChild(winDiv);
   const button=document.getElementById('play-again');
   button.addEventListener("click",reloading);
+
 
   const leaderBoardOnWin= document.createElement('div');
   leaderBoardOnWin.className= 'win-board';

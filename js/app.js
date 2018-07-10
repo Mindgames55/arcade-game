@@ -408,3 +408,8 @@ function randomInt(min, max){
           leadersBoardBody.innerHTML='<p>Local storage is not supported by your browser. It is not possible to generate a Leaderboard</p>'
         }
       }
+
+
+      function renderAll(){
+          ctx.drawImage(Resources.get(this.sprite), this.x, this.y,this.sizeX=columnWidth,this.sizeY=200);
+      }

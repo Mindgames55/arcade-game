@@ -18,22 +18,24 @@ var Engine = (function(global) {
     doc.body.appendChild(canvas);
     canvas.setAttribute('id','canvas');
 
+//runs when resources are ready
+    function init() {
+        lastTime = Date.now();
+        initial=true;    //this variable will be true while the player is selecting his character, it is set to false to start the game and start instantianting the objects
+        main();
+    }
+
+//repaints the screen (by calling update and render) using dt to give the animation illusion
     function main() {
         var now = Date.now(),
             dt = (now - lastTime) / 1000.0;
         if (!initial){
-          update(dt);
+          update(dt); //if initial===true no need to update objects position on screen
         }
-        render();
+        render();  //clears and repaint the canvas
         lastTime = now;
 
         win.requestAnimationFrame(main);
-    }
-
-    function init() {
-        lastTime = Date.now();
-        initial=true;
-        main();
     }
 
     function update(dt) {
@@ -41,18 +43,20 @@ var Engine = (function(global) {
         checkCollisions();
     }
 
+//check collision with every moving object (implemented as a method on every moving object)
     function checkCollisions(){
       allMovingObjects.forEach(function(enemy, index){
-        if (enemy.checkCollisions()){
+        if (enemy.checkCollisions()){ //returns true if the moving object is a collectible item and it removes it from the to-be-rendered objects array.
           allMovingObjects.splice(index, 1);
         }
       })
     }
 
+    //update position of every object on the canvas
     function updateEntities(dt) {
         allMovingObjects.forEach(function(enemy, index) {
             enemy.update(dt);
-            //eliminates the only reference to the crossing objects to make them garbage collectible once the have crossed the screen
+            //eliminates the only reference to the crossing objects to make them garbage collectible once they have crossed the screen
             if (enemy.x>canvas.width){
               let erased=allMovingObjects.splice(index, 1);
             }
@@ -64,7 +68,7 @@ var Engine = (function(global) {
     }
 
     function render() {
-         clear();
+         clear();  //clears the canvas before repainting it
          if (initial){  //displays character selection menu
            selector.render();
            allAvatar.forEach(function(player, index){
@@ -85,9 +89,8 @@ var Engine = (function(global) {
                numCols = 5,
                row, col;
 
-           for (row = 0; row < numRows; row++) {
+           for (row = 0; row < numRows; row++) {  //background
                for (col = 0; col < numCols; col++) {
-
                    ctx.drawImage(Resources.get(rowImages[row]), col * columnWidth, row * rowHeight);
                }
            }
@@ -96,9 +99,9 @@ var Engine = (function(global) {
          }
     }
 
-    function renderEntities() {
-        allMovingObjects.forEach(function(enemy) {
-            enemy.render();
+    function renderEntities() {  //renders all the entities (every object) on the screen
+        allMovingObjects.forEach(function(crossingObject) {
+            crossingObject.render();
         });
         allHearts.forEach(function(live) {
             live.render();
@@ -131,7 +134,3 @@ var Engine = (function(global) {
 
     global.ctx = ctx;
 })(this);
-
-function renderAll(){
-    ctx.drawImage(Resources.get(this.sprite), this.x, this.y,this.sizeX=columnWidth,this.sizeY=200);
-}

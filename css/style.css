@@ -1,6 +1,6 @@
 body {
     text-align: center;
-    width: 800px;
+    width: 900px;
     margin: auto;
     display: flex;
     align-items: center;
@@ -49,6 +49,7 @@ body {
   grid-template-columns: 4fr 1fr;
   font-size: 20px;
   text-transform: capitalize;
+  text-align: left;
 }
 
 .board-header,
@@ -68,7 +69,6 @@ button {
 .win-board{
   border: 3px solid green;
   margin-top: 40px;
-  text-align: left;
   border-radius: 4px;
 }
 

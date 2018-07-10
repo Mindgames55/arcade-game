@@ -6,7 +6,6 @@ const leadersBoardBody=document.createElement('div');
 let allMovingObjects=[];
 let allHearts=[];
 let enemySprite='enemy-bug';
-let points=0;
 
 //load the leaders array
 if (typeof(Storage) !== "undefined"){
@@ -413,6 +412,5 @@ class Key{  //the key object. If player collides => wins the game
   }
 
   function renderAll(){
-    console.log(this instanceof Enemies);
       ctx.drawImage(Resources.get(this.sprite), this.x, this.y,this.sizeX=columnWidth,this.sizeY=200);
   }

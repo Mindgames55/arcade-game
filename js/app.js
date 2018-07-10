@@ -43,8 +43,8 @@ class MovingObjects{
       if ((Math.abs(this.x-player.x)<x) && (Math.abs(this.y-player.y)===Math.abs(this.startingY-player.startingY))){
         switch (this.name){
           case 'enemy-bug':
-            player.startingPositionOnGame();
-            switch (removeLives()) {
+            player.startingPositionOnGame();  //reseting player's position
+            switch (removeLives()) {  //removes a heart with every collision
               case 2:
                 alert('You have one more live to spare, you can either keep collecting points or go for the key and win the game. Just keep in mind that if you choose keep playing and you die, you will loose all of your points :(');
                 break;
@@ -53,15 +53,15 @@ class MovingObjects{
             }
             return false;
           case 'Gem-Blue':
-            pointsCollected.increasePoints(50);
-            allMovingObjects.forEach(function(enemy,index){
+            pointsCollected.increasePoints(50); //points+50
+            allMovingObjects.forEach(function(enemy,index){  //if the player catches a blue gem all bugs on screen will be removed.
               if (enemy.name==='enemy-bug'){
                 allMovingObjects.splice(index,1);
               }
             });
             break;
           case 'Gem-Green':
-          pointsCollected.increasePoints(100);
+          pointsCollected.increasePoints(100); //points+100
           allMovingObjects.forEach(function(enemy,index){
             if (enemy.name==='enemy-bug'){
               enemy.sprite='images/Star.png';  //turn enemies into collectible stars for 5seconds
@@ -75,7 +75,7 @@ class MovingObjects{
             break;
           case 'Gem-Orange':
           pointsCollected.increasePoints(500);
-          allMovingObjects.forEach(function(enemy,index){
+          allMovingObjects.forEach(function(enemy,index){  //this will freeze bugs for 5 seconds
             if (enemy.name==='enemy-bug'){
               enemy.speed=0;
               enemySprite='nothing';
@@ -108,7 +108,7 @@ class Gems extends MovingObjects{
   }
 }
 
-class Hearts{
+class Hearts{  //every live is an object instantiated from this class
   constructor(x){
     this.y=-15;
     this.x=x;
@@ -120,26 +120,26 @@ class Hearts{
   }
 }
 
-class Points{
+class Points{  //points will be instantiated from this class
   constructor(){
     this.y=30;
     this.points=0;
     this.text='Points: 0';
   }
 
-  increasePoints(points){
+  increasePoints(points){  //will increase total of points when collecting gems
     this.points+=points;
     this.text=`Points: ${this.points}`;
   }
 
-  render(){
+  render(){  //rendering total amount of points on canvas
     ctx.font= "30px serif";
     this.x=ctx.measureText(this.text).width;
     ctx.fillText(this.text,505-this.x,this.y);
   }
 }
 
-class Selector{
+class Selector{  //this is to instantiate the player selector object
   constructor(fileName){
     this.sprite='images/'+fileName+'.png';
     this.x=0;
@@ -152,7 +152,7 @@ class Selector{
     renderAll.call(this);
   }
 
-  handleInput(keyPressed){
+  handleInput(keyPressed){  //this method allows movement to select the avatar
     switch (keyPressed) {
       case 'left':
         this.x-=(this.x!==0)?columnWidth:0;
@@ -161,7 +161,7 @@ class Selector{
         this.x+=(this.x!==404)?columnWidth:0;
         break;
       case 'enter':
-      return this.x;
+      return this.x;  //returns the x position of the selected player
     }
   }
 }
@@ -173,7 +173,7 @@ class Players{
     this.y=0;
   }
 
-  startingPositionOnGame(){
+  startingPositionOnGame(){  //initial position. It is also called if the player collides with a bug. restarting its position
     this.x=columnWidth*2;
     this.y=this.startingY+4*rowHeight;
   }
@@ -183,13 +183,13 @@ class Players{
     renderAll.call(this);
   }
 
-  checkIfWon(){
+  checkIfWon(){  //check if player grabbed the key to win the game
     if (this.x===winKey.x && this.y<0){
-      winOrLoose('won', pointsCollected.points);
+      winOrLoose('won', pointsCollected.points);  //handles what happens if the player win or loose the game
     }
   }
 
-  handleInput(keyPressed){
+  handleInput(keyPressed){  //movement of player
     switch (keyPressed) {
       case 'up':
         this.y-=(this.y>10)?rowHeight:0;
@@ -208,7 +208,7 @@ class Players{
 
 }
 
-class Key{
+class Key{  //the key object. If player collides => wins the game
   constructor(name){
     this.sprite=('images/'+name+'.png');
     this.x=101*randomInt(0, 4);
@@ -220,14 +220,14 @@ class Key{
   }
 }
 
-  const gemIntervalID= window.setInterval(function(){
+  const gemIntervalID= window.setInterval(function(){  //generates gems randomly every 3 seconds
     if (!initial){
       const gemValues=[
         'Gem-Blue',
         'Gem-Green',
         'Gem-Orange'
       ];
-      let movingGemInstances= new Gems(gemValues[randomInt(0,2)]);  //generates gems randomly
+      let movingGemInstances= new Gems(gemValues[randomInt(0,2)]);  //gems instantiation
       movingGemInstances.placeInColumns(41.5);
       allMovingObjects.push(movingGemInstances);
     }
@@ -235,14 +235,14 @@ class Key{
 
   const bugIntervalID=window.setInterval(function(){
     if (!initial){
-      let movingBugsInstances= new Enemies(enemySprite);
+      let movingBugsInstances= new Enemies(enemySprite);   //generates bugs randomly every second. enemy instantiation
       movingBugsInstances.placeInColumns(-20);
       allMovingObjects.push(movingBugsInstances);
     }
   },1000);
 
   const allAvatar=[];
-  const selector= new Selector('Selector');
+  const selector= new Selector('Selector');  //select avatar menu. selector instantiation
   let avatar=[
     'char-boy',
     'char-cat-girl',
@@ -251,14 +251,14 @@ class Key{
     'char-princess-girl'
   ];
   for (let i=0;i<avatar.length;i++){
-    let player= new Players(avatar[i]);
+    let player= new Players(avatar[i]);  //avatar instantiation
     allAvatar.push(player);
   }
   let player,
       winKey,
       pointsCollected;
 
-  const moveChar= function(e){
+  const moveChar= function(e){   //movement of player while playing the game
     var allowedKeys = {
       37: 'left',
       38: 'up',
@@ -268,7 +268,7 @@ class Key{
     player.handleInput(allowedKeys[e.keyCode])
   }
 
-  const selectChar= function (e) {
+  const selectChar= function (e) {  //movement of selector to choose avatar
       var allowedKeys = {
           37: 'left',
           39: 'right',
@@ -276,7 +276,7 @@ class Key{
       };
 
        let selectedX=selector.handleInput(allowedKeys[e.keyCode]);
-       if (selectedX!==undefined){
+       if (selectedX!==undefined){  //avatar has been chosen
          document.removeEventListener('keyup',selectChar);
          leadersBoardBody.className='board';
          document.body.appendChild(leadersBoardBody);
@@ -287,14 +287,14 @@ class Key{
          gameHeader.innerHTML=`<img src="images/Gem-Blue.png"></img> + 50
                                 <img src="images/Gem-Green.png"></img> + 100
                                 <img src="images/Gem-Orange.png"></img> + 500
-                                <img src="images/Star.png"></img> + 1000`;
+                                <img src="images/Star.png"></img> + 1000`;  //gems legend
 
-         createBoardOnPage(leadersOnArcade, true);
-         player= new Players(avatar[selectedX/columnWidth]);
-         winKey= new Key('Key');
+         createBoardOnPage(leadersOnArcade, true);  //creates leaders board aside of the canvas
+         player= new Players(avatar[selectedX/columnWidth]);  //instantiate player passing the sprite name
+         winKey= new Key('Key');  //instantiate the key (win)
          player.startingPositionOnGame();
-         pointsCollected=new Points();
-         for (let i=0;i<3;i++){
+         pointsCollected=new Points();  //instantiate the points object
+         for (let i=0;i<3;i++){  //instantiate the lives
            let hearts=new Hearts(50*i);
            allHearts.push(hearts);
          }
@@ -305,7 +305,7 @@ class Key{
 
   document.addEventListener('keyup', selectChar );
 
-  function winOrLoose(action, points){
+  function winOrLoose(action, points){  //game-over behavior (win or loose)
     const string=`<h1>You ${action} with ${points} points!</h1>
                       <button id="play-again">Play Again</button>`;
     clearInterval(gemIntervalID);
@@ -337,20 +337,20 @@ class Key{
     }
   }
 
-function reloading(){
-  location.reload();
-}
+  function reloading(){
+    location.reload();
+  }
 
-let removeLives=(function(){
-  let counter=1;
-  return function addOne(){
-    allHearts.pop();
-    return counter++}
-})();
-//returns a random integer between min-max both inclusive
-function randomInt(min, max){
-  return Math.floor(Math.random()*(max-min+1)+min);
-}
+  let removeLives=(function(){  //this is to remove lives on every collision  MY FIRST CLOSURE :)
+    let counter=1;
+    return function addOne(){
+      allHearts.pop();
+      return counter++}
+  })();
+  //returns a random integer between min-max both inclusive
+  function randomInt(min, max){
+    return Math.floor(Math.random()*(max-min+1)+min);
+  }
 
 //displays the pop up box to get the name of a new record
   function getLeaderName(){
@@ -361,11 +361,11 @@ function randomInt(min, max){
   }
 
   //creates an object with the data of the user with a new record
-    class Leader{
-      constructor(){
-        this.name= getLeaderName();
-        this.points=pointsCollected.points;
-      }
+  class Leader{
+    constructor(){
+      this.name= getLeaderName();
+      this.points=pointsCollected.points;
+    }
   }
 
   //creates the board and storages it on local storage
@@ -386,34 +386,33 @@ function randomInt(min, max){
   }
 
   //sorts by number of moves. In case they are equal it is sorted by time.
-    function orderLeaderBoard(objects){
-      objects.sort(function(a, b){return (a.points-b.points<0)?1:((a.points-b.points>0))?-1:0});
+  function orderLeaderBoard(objects){
+    objects.sort(function(a, b){return (a.points-b.points<0)?1:((a.points-b.points>0))?-1:0});
+  }
+
+  //adds the board to the DOM
+  function createBoardOnPage(users,value){
+    leadersBoardBody.innerHTML=[];
+    if (value){
+      let piece=document.createDocumentFragment();
+      for (i=0;i<users.length;i++){
+        let name=document.createElement('p');
+        name.textContent=users[i].name;
+        let points=document.createElement('p');
+        points.textContent=users[i].points;
+        name.className='leader-name';
+        points.className='leader-points';
+        piece.appendChild(name);
+        piece.appendChild(points);
+      }
+      leadersBoardBody.appendChild(piece);
     }
+    else {
+      leadersBoardBody.innerHTML='<p>Local storage is not supported by your browser. It is not possible to generate a Leaderboard</p>'
+    }
+  }
 
-    //adds the board to the DOM
-      function createBoardOnPage(users,value){
-        leadersBoardBody.innerHTML=[];
-        if (value){
-          let piece=document.createDocumentFragment();
-          for (i=0;i<users.length;i++){
-            let name=document.createElement('p');
-            name.textContent=users[i].name;
-            let points=document.createElement('p');
-            points.textContent=users[i].points;
-            name.className='leader-name';
-            points.className='leader-points';
-            piece.appendChild(name);
-            piece.appendChild(points);
-          }
-          leadersBoardBody.appendChild(piece);
-        }
-        else {
-          leadersBoardBody.innerHTML='<p>Local storage is not supported by your browser. It is not possible to generate a Leaderboard</p>'
-        }
-      }
-
-
-      function renderAll(){
-        console.log(this instanceof Enemies);
-          ctx.drawImage(Resources.get(this.sprite), this.x, this.y,this.sizeX=columnWidth,this.sizeY=200);
-      }
+  function renderAll(){
+    console.log(this instanceof Enemies);
+      ctx.drawImage(Resources.get(this.sprite), this.x, this.y,this.sizeX=columnWidth,this.sizeY=200);
+  }

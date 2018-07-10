@@ -219,198 +219,198 @@ class Key{  //the key object. If player collides => wins the game
   }
 }
 
-  const gemIntervalID= window.setInterval(function(){  //generates gems randomly every 3 seconds
-    if (!initial){
-      const gemValues=[
-        'Gem-Blue',
-        'Gem-Green',
-        'Gem-Orange'
-      ];
-      let movingGemInstances= new Gems(gemValues[randomInt(0,2)]);  //gems instantiation
-      movingGemInstances.placeInColumns(41.5);
-      allMovingObjects.push(movingGemInstances);
-    }
-  },3000);
-
-  const bugIntervalID=window.setInterval(function(){
-    if (!initial){
-      let movingBugsInstances= new Enemies(enemySprite);   //generates bugs randomly every second. enemy instantiation
-      movingBugsInstances.placeInColumns(-20);
-      allMovingObjects.push(movingBugsInstances);
-    }
-  },1000);
-
-  const allAvatar=[];
-  const selector= new Selector('Selector');  //select avatar menu. selector instantiation
-  let avatar=[
-    'char-boy',
-    'char-cat-girl',
-    'char-horn-girl',
-    'char-pink-girl',
-    'char-princess-girl'
-  ];
-  for (let i=0;i<avatar.length;i++){
-    let player= new Players(avatar[i]);  //avatar instantiation
-    allAvatar.push(player);
+const gemIntervalID= window.setInterval(function(){  //generates gems randomly every 3 seconds
+  if (!initial){
+    const gemValues=[
+      'Gem-Blue',
+      'Gem-Green',
+      'Gem-Orange'
+    ];
+    let movingGemInstances= new Gems(gemValues[randomInt(0,2)]);  //gems instantiation
+    movingGemInstances.placeInColumns(41.5);
+    allMovingObjects.push(movingGemInstances);
   }
-  let player,
-      winKey,
-      pointsCollected;
+},3000);
 
-  const moveChar= function(e){   //movement of player while playing the game
+const bugIntervalID=window.setInterval(function(){
+  if (!initial){
+    let movingBugsInstances= new Enemies(enemySprite);   //generates bugs randomly every second. enemy instantiation
+    movingBugsInstances.placeInColumns(-20);
+    allMovingObjects.push(movingBugsInstances);
+  }
+},1000);
+
+const allAvatar=[];
+const selector= new Selector('Selector');  //select avatar menu. selector instantiation
+let avatar=[
+  'char-boy',
+  'char-cat-girl',
+  'char-horn-girl',
+  'char-pink-girl',
+  'char-princess-girl'
+];
+for (let i=0;i<avatar.length;i++){
+  let player= new Players(avatar[i]);  //avatar instantiation
+  allAvatar.push(player);
+}
+let player,
+    winKey,
+    pointsCollected;
+
+const moveChar= function(e){   //movement of player while playing the game
+  var allowedKeys = {
+    37: 'left',
+    38: 'up',
+    39: 'right',
+    40: 'down'
+  }
+  player.handleInput(allowedKeys[e.keyCode])
+}
+
+const selectChar= function (e) {  //movement of selector to choose avatar
     var allowedKeys = {
-      37: 'left',
-      38: 'up',
-      39: 'right',
-      40: 'down'
-    }
-    player.handleInput(allowedKeys[e.keyCode])
-  }
+        37: 'left',
+        39: 'right',
+        13: 'enter'
+    };
 
-  const selectChar= function (e) {  //movement of selector to choose avatar
-      var allowedKeys = {
-          37: 'left',
-          39: 'right',
-          13: 'enter'
-      };
+     let selectedX=selector.handleInput(allowedKeys[e.keyCode]);
+     if (selectedX!==undefined){  //avatar has been chosen
+       document.removeEventListener('keyup',selectChar);
+       leadersBoardBody.className='board';
+       document.body.appendChild(leadersBoardBody);
 
-       let selectedX=selector.handleInput(allowedKeys[e.keyCode]);
-       if (selectedX!==undefined){  //avatar has been chosen
-         document.removeEventListener('keyup',selectChar);
-         leadersBoardBody.className='board';
-         document.body.appendChild(leadersBoardBody);
+       const gameHeader=document.querySelector('.header');
+       document.getElementById('canvas').className='canvas-on-game';
+       gameHeader.className='game-header';
+       gameHeader.innerHTML=`<img src="images/Gem-Blue.png"></img> + 50
+                              <img src="images/Gem-Green.png"></img> + 100
+                              <img src="images/Gem-Orange.png"></img> + 500
+                              <img src="images/Star.png"></img> + 1000`;  //gems legend
 
-         const gameHeader=document.querySelector('.header');
-         document.getElementById('canvas').className='canvas-on-game';
-         gameHeader.className='game-header';
-         gameHeader.innerHTML=`<img src="images/Gem-Blue.png"></img> + 50
-                                <img src="images/Gem-Green.png"></img> + 100
-                                <img src="images/Gem-Orange.png"></img> + 500
-                                <img src="images/Star.png"></img> + 1000`;  //gems legend
-
-         createBoardOnPage(leadersOnArcade, true);  //creates leaders board aside of the canvas
-         player= new Players(avatar[selectedX/columnWidth]);  //instantiate player passing the sprite name
-         winKey= new Key('Key');  //instantiate the key (win)
-         player.startingPositionOnGame();
-         pointsCollected=new Points();  //instantiate the points object
-         for (let i=0;i<3;i++){  //instantiate the lives
-           let hearts=new Hearts(50*i);
-           allHearts.push(hearts);
-         }
-         initial=false;
-         document.addEventListener('keyup', moveChar);
+       createBoardOnPage(leadersOnArcade, true);  //creates leaders board aside of the canvas
+       player= new Players(avatar[selectedX/columnWidth]);  //instantiate player passing the sprite name
+       winKey= new Key('Key');  //instantiate the key (win)
+       player.startingPositionOnGame();
+       pointsCollected=new Points();  //instantiate the points object
+       for (let i=0;i<3;i++){  //instantiate the lives
+         let hearts=new Hearts(50*i);
+         allHearts.push(hearts);
        }
-  }
+       initial=false;
+       document.addEventListener('keyup', moveChar);
+     }
+}
 
-  document.addEventListener('keyup', selectChar );
+document.addEventListener('keyup', selectChar );
 
-  function winOrLoose(action, points){  //game-over behavior (win or loose)
-    const string=`<h1>You ${action} with ${points} points!</h1>
-                      <button id="play-again">Play Again</button>`;
-    clearInterval(gemIntervalID);
-    clearInterval(bugIntervalID);
-    const canvas=document.getElementById('canvas');
-    canvas.classList.add('hidden');
-    document.querySelector('.game-header').classList.add('hidden');
-    winDiv= document.createElement('div');
-    winDiv.innerHTML=string;
-    document.body.appendChild(winDiv);
-    const button=document.getElementById('play-again');
-    button.addEventListener("click",reloading);
+function winOrLoose(action, points){  //game-over behavior (win or loose)
+  const string=`<h1>You ${action} with ${points} points!</h1>
+                    <button id="play-again">Play Again</button>`;
+  clearInterval(gemIntervalID);
+  clearInterval(bugIntervalID);
+  const canvas=document.getElementById('canvas');
+  canvas.classList.add('hidden');
+  document.querySelector('.game-header').classList.add('hidden');
+  winDiv= document.createElement('div');
+  winDiv.innerHTML=string;
+  document.body.appendChild(winDiv);
+  const button=document.getElementById('play-again');
+  button.addEventListener("click",reloading);
 
-    const leaderBoardOnWin= document.createElement('div');
-    leaderBoardOnWin.className= 'win-board';
-    leaderBoardOnWin.innerHTML= `<div class="board-header"><p>Leader</p><p>Points</p></div>`;
-    leadersBoardBody.className='leader-bodyOnWin';
-    leaderBoardOnWin.appendChild(leadersBoardBody);
+  const leaderBoardOnWin= document.createElement('div');
+  leaderBoardOnWin.className= 'win-board';
+  leaderBoardOnWin.innerHTML= `<div class="board-header"><p>Leader</p><p>Points</p></div>`;
+  leadersBoardBody.className='leader-bodyOnWin';
+  leaderBoardOnWin.appendChild(leadersBoardBody);
 
-    document.body.appendChild(leaderBoardOnWin);
+  document.body.appendChild(leaderBoardOnWin);
 
-    if (typeof(Storage) !== "undefined"){
-      if (pointsCollected.points>=localStorage.getItem("master")||JSON.parse(localStorage.getItem("leadersOnArcade")).length<5){
-        createBoard();
-      }
+  if (typeof(Storage) !== "undefined"){
+    if (pointsCollected.points>=localStorage.getItem("master")||JSON.parse(localStorage.getItem("leadersOnArcade")).length<5){
+      createBoard();
     }
-    else {
-      createBoardOnPage([],false);
-    }
   }
+  else {
+    createBoardOnPage([],false);
+  }
+}
 
-  function reloading(){
-    location.reload();
-  }
+function reloading(){
+  location.reload();
+}
 
-  let removeLives=(function(){  //this is to remove lives on every collision  MY FIRST CLOSURE :)
-    let counter=1;
-    return function addOne(){
-      allHearts.pop();
-      return counter++}
-  })();
-  //returns a random integer between min-max both inclusive
-  function randomInt(min, max){
-    return Math.floor(Math.random()*(max-min+1)+min);
-  }
+let removeLives=(function(){  //this is to remove lives on every collision  MY FIRST CLOSURE :)
+  let counter=1;
+  return function addOne(){
+    allHearts.pop();
+    return counter++}
+})();
+//returns a random integer between min-max both inclusive
+function randomInt(min, max){
+  return Math.floor(Math.random()*(max-min+1)+min);
+}
 
 //displays the pop up box to get the name of a new record
-  function getLeaderName(){
-    const person = prompt("You have set a new record, enter your name:", "Arcade Game Master");
-    if (person !== null && person !== "") {
-      return person;
-    }
+function getLeaderName(){
+  const person = prompt("You have set a new record, enter your name:", "Arcade Game Master");
+  if (person !== null && person !== "") {
+    return person;
   }
+}
 
-  //creates an object with the data of the user with a new record
-  class Leader{
-    constructor(){
-      this.name= getLeaderName();
-      this.points=pointsCollected.points;
-    }
+//creates an object with the data of the user with a new record
+class Leader{
+  constructor(){
+    this.name= getLeaderName();
+    this.points=pointsCollected.points;
   }
+}
 
-  //creates the board and storages it on local storage
-  function createBoard(){
-    let leaderEntrance= new Leader();
-    if (leadersOnArcade.length>=5){
+//creates the board and storages it on local storage
+function createBoard(){
+  let leaderEntrance= new Leader();
+  if (leadersOnArcade.length>=5){
 
-      leadersOnArcade.splice(-1,1,leaderEntrance);
-    }
-    else {
-      leadersOnArcade.push(leaderEntrance);
-    }
-    orderLeaderBoard(leadersOnArcade);
-    localStorage.setItem("leadersOnArcade", JSON.stringify(leadersOnArcade));
-    leaderEntries=JSON.parse(localStorage.getItem("leadersOnArcade"));
-    localStorage.setItem("master",leaderEntries[leaderEntries.length-1].points);
-    createBoardOnPage(leaderEntries, true);
+    leadersOnArcade.splice(-1,1,leaderEntrance);
   }
-
-  //sorts by number of moves. In case they are equal it is sorted by time.
-  function orderLeaderBoard(objects){
-    objects.sort(function(a, b){return (a.points-b.points<0)?1:((a.points-b.points>0))?-1:0});
+  else {
+    leadersOnArcade.push(leaderEntrance);
   }
+  orderLeaderBoard(leadersOnArcade);
+  localStorage.setItem("leadersOnArcade", JSON.stringify(leadersOnArcade));
+  leaderEntries=JSON.parse(localStorage.getItem("leadersOnArcade"));
+  localStorage.setItem("master",leaderEntries[leaderEntries.length-1].points);
+  createBoardOnPage(leaderEntries, true);
+}
 
-  //adds the board to the DOM
-  function createBoardOnPage(users,value){
-    leadersBoardBody.innerHTML=[];
-    if (value){
-      let piece=document.createDocumentFragment();
-      for (i=0;i<users.length;i++){
-        let name=document.createElement('p');
-        name.textContent=users[i].name;
-        let points=document.createElement('p');
-        points.textContent=users[i].points;
-        name.className='leader-name';
-        points.className='leader-points';
-        piece.appendChild(name);
-        piece.appendChild(points);
-      }
-      leadersBoardBody.appendChild(piece);
+//sorts by number of moves. In case they are equal it is sorted by time.
+function orderLeaderBoard(objects){
+  objects.sort(function(a, b){return (a.points-b.points<0)?1:((a.points-b.points>0))?-1:0});
+}
+
+//adds the board to the DOM
+function createBoardOnPage(users,value){
+  leadersBoardBody.innerHTML=[];
+  if (value){
+    let piece=document.createDocumentFragment();
+    for (i=0;i<users.length;i++){
+      let name=document.createElement('p');
+      name.textContent=users[i].name;
+      let points=document.createElement('p');
+      points.textContent=users[i].points;
+      name.className='leader-name';
+      points.className='leader-points';
+      piece.appendChild(name);
+      piece.appendChild(points);
     }
-    else {
-      leadersBoardBody.innerHTML='<p>Local storage is not supported by your browser. It is not possible to generate a Leaderboard</p>'
-    }
+    leadersBoardBody.appendChild(piece);
   }
+  else {
+    leadersBoardBody.innerHTML='<p>Local storage is not supported by your browser. It is not possible to generate a Leaderboard</p>'
+  }
+}
 
-  function renderAll(){
-      ctx.drawImage(Resources.get(this.sprite), this.x, this.y,this.sizeX=columnWidth,this.sizeY=200);
-  }
+function renderAll(){
+    ctx.drawImage(Resources.get(this.sprite), this.x, this.y,this.sizeX=columnWidth,this.sizeY=200);
+}

@@ -1,13 +1,14 @@
 //global
 const rowHeight=83;
 const columnWidth=101;
-let leadersOnArcade;
+let leadersOnArcade;  //leader board entries
 const leadersBoardBody=document.createElement('div');
 let allMovingObjects=[];
 let allHearts=[];
 let enemySprite='enemy-bug';
 let points=0;
 
+//load the leaders array
 if (typeof(Storage) !== "undefined"){
   if (JSON.parse(localStorage.getItem("leadersOnArcade"))!==null){
     leadersOnArcade=JSON.parse(localStorage.getItem("leadersOnArcade"));
@@ -27,7 +28,7 @@ class MovingObjects{
     this.x=-100;  //intial position off screen
   }
 
-  placeInColumns(yDisplacement){ //this is to generate placement in columns randomly
+  placeInColumns(yDisplacement){ //this is to generate object placement in columns randomly
     this.startingY=yDisplacement;  //this value is to center the image on every column (player uses it as well)
     let columnPlacement= randomInt(1,3);
     this.y=yDisplacement+rowHeight*columnPlacement;
@@ -35,12 +36,6 @@ class MovingObjects{
 
   update(dt){
     this.x+=dt*this.speed;
-  }
-
-  render() {
-      if (this.name!=='nothing'){
-        ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-      }
   }
 
   checkCollisions(){
@@ -96,6 +91,14 @@ class MovingObjects{
         }
         return true;  //remove the collectible items once collected
       }
+  }
+}
+
+class Enemies extends MovingObjects{
+  render(){
+    if (this.name!=='nothing'){
+      ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+    }
   }
 }
 
@@ -232,7 +235,7 @@ class Key{
 
   const bugIntervalID=window.setInterval(function(){
     if (!initial){
-      let movingBugsInstances= new MovingObjects(enemySprite);
+      let movingBugsInstances= new Enemies(enemySprite);
       movingBugsInstances.placeInColumns(-20);
       allMovingObjects.push(movingBugsInstances);
     }
@@ -411,5 +414,6 @@ function randomInt(min, max){
 
 
       function renderAll(){
+        console.log(this instanceof Enemies);
           ctx.drawImage(Resources.get(this.sprite), this.x, this.y,this.sizeX=columnWidth,this.sizeY=200);
       }

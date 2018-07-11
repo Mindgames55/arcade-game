@@ -49,6 +49,7 @@ class MovingObjects{
                 alert('You have one more live to spare, you can either keep collecting points or go for the key and win the game. Just keep in mind that if you choose keep playing and you die, you will loose all of your points :(');
                 break;
               case 3:
+                pointsCollected.points=0;
                 winOrLoose('LOST', 'NO');
             }
             return false;

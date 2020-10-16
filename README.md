@@ -1,6 +1,6 @@
 # Project Title
 
-Arcade game - You can play it [here](https://mindgames55.github.io/arcade-game/)
+Arcade game
 
 ## How to Play
 
